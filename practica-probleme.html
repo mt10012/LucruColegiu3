@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probleme rezolvate — Practică</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#faf9f6;--surface:#ffffff;--card:#f5f3ef;--border:#e0ddd6;--border2:#ccc9c0;--ink:#1a1916;--muted:#7a776e;--accent:#c44b1f;--accent2:#1f6bc4;--accent3:#1f9c4b;--code-bg:#1e1c19;--code-text:#e8e4dc;--tag-bg:#ffeee8;--tag-color:#c44b1f;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+.topbar{background:var(--ink);padding:0 2rem}
+.topbar-inner{max-width:960px;margin:0 auto;height:48px;display:flex;align-items:center;justify-content:space-between}
+.topbar-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.06em}
+.topbar-nav{display:flex;gap:0}
+.topbar-nav a{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.45);text-decoration:none;padding:0 14px;height:48px;display:flex;align-items:center;transition:color .2s,background .2s;letter-spacing:.04em}
+.topbar-nav a:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.06)}
+
+nav.cv-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:rgba(26,28,36,0.95);border-bottom:1px solid rgba(0,0,0,.12);padding:0 2rem}
+.cv-nav .nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.75);letter-spacing:.05em}
+.nav-brand span{color:#5b8dee}
+.nav-links{display:flex;gap:1rem}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.75);text-decoration:none;transition:color .2s;letter-spacing:.04em;padding:12px}
+.nav-links a:hover{color:#fff}
+
+.hero{background:var(--ink);padding:4rem 2rem 3rem;position:relative;overflow:hidden}
+.hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:1}
+
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px)}
+.hero-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);background:rgba(196,75,31,.15);border:1px solid rgba(196,75,31,.3);padding:4px 12px;border-radius:3px;letter-spacing:.08em;margin-bottom:1.5rem}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:#fff;line-height:1.1;margin-bottom:1rem}
+.hero-desc{font-size:1.0rem;color:rgba(255,255,255,.55);max-width:700px;margin-bottom:1.5rem;font-weight:300;line-height:1.6}
+
+.container{max-width:960px;margin:0 auto;padding:2rem}
+.section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin:1rem 0}
+.lang-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.problem{background:var(--surface);border:1px solid var(--border);padding:1rem;border-radius:8px}
+.accordion-list{display:grid;gap:1rem}
+.accordion-item{border:1px solid var(--border);border-radius:14px;background:linear-gradient(180deg,#fff,#fbfaf7);overflow:hidden;box-shadow:0 10px 24px rgba(26,25,22,.04)}
+.accordion-toggle{width:100%;border:0;background:transparent;color:var(--ink);cursor:pointer;padding:1rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;font:inherit;text-align:left}
+.accordion-toggle:hover{background:rgba(31,107,196,.04)}
+.accordion-toggle .toggle-left{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.accordion-toggle .toggle-left strong,.accordion-toggle .toggle-left span{display:block}
+.accordion-toggle .toggle-left strong{font-size:1rem;line-height:1.25}
+.accordion-toggle .toggle-left span{color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:.92rem;line-height:1.35;letter-spacing:.06em}
+.accordion-head{display:flex;flex-direction:column;gap:.15rem}
+.accordion-head strong{font-size:1rem;letter-spacing:.01em}
+.accordion-head span{color:var(--muted);font-size:.92rem}
+.toggle-chip{flex:0 0 auto;width:2rem;height:2rem;border-radius:999px;border:1px solid var(--border);display:grid;place-items:center;background:#fff;color:var(--accent);font-size:1rem;transition:transform .25s ease,background .25s ease,border-color .25s ease}
+.accordion-item.is-open .toggle-chip{transform:rotate(45deg);background:var(--tag-bg);border-color:rgba(196,75,31,.28)}
+.accordion-panel{max-height:0;overflow:hidden;opacity:0;transition:max-height .35s ease,opacity .25s ease,padding .25s ease;padding:0 1.1rem}
+.accordion-item.is-open .accordion-panel{max-height:4200px;opacity:1;padding-bottom:1.1rem}
+.accordion-body{border-top:1px dashed var(--border2);padding-top:1rem}
+.accordion-body p{margin-bottom:.8rem;color:var(--muted)}
+.problem-resources{display:grid;gap:.75rem;margin:1rem 0 1.1rem}
+.resource-box{border:1px dashed var(--border2);border-radius:10px;background:rgba(255,255,255,.65);padding:.85rem .9rem}
+.resource-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin-bottom:.35rem}
+.resource-slot{min-height:2.5rem;border-radius:8px;background:rgba(31,107,196,.03);border:1px solid rgba(31,107,196,.08);padding:.65rem .75rem;color:var(--muted)}
+.resource-slot.link-slot{display:flex;align-items:center;gap:.5rem;word-break:normal;overflow-wrap:break-word}
+.resource-slot.link-slot a{color:var(--accent2);text-decoration:none}
+.resource-slot.link-slot a:hover{text-decoration:underline}
+.resource-slot.image-slot{min-height:5.5rem;display:flex;align-items:center}
+.resource-slot.image-slot img{display:block;max-width:100%;height:auto;border-radius:6px}
+.ogdb-input{width:100%;max-width:520px;padding:.5rem .6rem;border:1px solid var(--border2);border-radius:6px;font-family:'IBM Plex Mono',monospace;margin-right:.5rem}
+.ogdb-save-btn{padding:.45rem .6rem;border:1px solid var(--border2);background:var(--accent2);color:#fff;border-radius:6px;cursor:pointer}
+.problem-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);background:rgba(31,107,196,.08);border:1px solid rgba(31,107,196,.15);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.code-block{background:var(--code-bg);color:var(--code-text);padding:1rem;border-radius:6px;overflow:auto;font-family:'IBM Plex Mono',monospace}
+
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:3rem}
+.info-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
+.info-box.accent-left{border-left:3px solid var(--accent)}
+.info-box.accent-left2{border-left:3px solid var(--accent2)}
+.box-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem}
+.box-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:.5rem}
+.box-text{font-size:.9rem;color:var(--muted);line-height:1.7}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.compare-card{border-radius:8px;padding:1.25rem;border:1px solid var(--border)}
+.compare-card.static{background:#fff9f6;border-color:#f0d8cc}
+.compare-card.dynamic{background:#f5f9ff;border-color:#ccd8f0}
+.compare-title{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;margin-bottom:.75rem;letter-spacing:.06em}
+
+.recap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.5rem 0}
+.recap-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;text-align:center}
+.recap-card .rc-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:300;line-height:1;margin-bottom:.5rem}
+.recap-card .rc-label{font-size:.8rem;color:var(--muted)}
+
+@media(max-width:620px){
+  .intro-grid{grid-template-columns:1fr}
+  .compare-grid{grid-template-columns:1fr}
+  .recap-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:2rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="cv-nav">
+    <div class="nav-inner">
+        <span class="nav-brand"><span>//</span> malachi-matei.cv</span>
+        <div class="nav-links">
+          <a href="polimorfism-static-cs.html">Polimorfism</a>
+          <a href="practica-probleme.html" class="active">Probleme Practică</a>
+          <a href="asumarea-raspunderii.html">Asumare responsabilitate</a>
+          <a href="index.html">Curriculum Vitae</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-pill">Resurse · Probleme rezolvate</div>
+    <h1>Probleme rezolvate<br><em>Practică pe limbaje</em></h1>
+    <p class="hero-desc">Probleme rezolvate, grupate pe limbaj: C++, C#, Java, Python. Dați click pe limbaj pentru a naviga direct la secțiune.</p>
+  </div>
+</div>
+
+<main class="container">
+  <nav style="margin-bottom:1rem">
+    <a href="#cpp">C++</a> · <a href="#csharp">C#</a> · <a href="#java">Java</a> · <a href="#python">Python</a>
+  </nav>
+
+  <section id="cpp" class="section">
+    <h2>C++</h2>
+    <div class="accordion-list">
+      <article class="accordion-item">
+        <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m55-panel">
+          <span class="toggle-left"><strong>m5.5 - Covorul lui Sierpinski</strong><span>C++ - recursivitate și afișare matricială</span></span>
+          <span class="problem-label">m5.5</span>
+          <span class="chevron">⌄</span>
+        </button>
+        <div class="accordion-panel" id="m55-panel">
+          <div class="accordion-body">
+            <p>Generează un model simplificat al covorului lui Sierpinski și afișează informații despre acoperire.</p>
+              <div class="problem-resources">
+                <div class="resource-box">
+                  <div class="resource-label">OnlineGDB</div>
+                  <div class="resource-slot link-slot"><a href="https://onlinegdb.com/XxQHHZ2tkb" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/XxQHHZ2tkb</a></div>
+                </div>
+                <div class="resource-box">
+                  <div class="resource-label">Imagini cod rulat</div>
+                  <div class="resource-slot image-slot"><a href="img/cpp.png" target="_blank" rel="noopener noreferrer"><img src="img/cpp.png" alt="Captură output C++ - Covorul lui Sierpinski"></a></div>
+                </div>
+              </div>
+            <div class="code-block"><pre>#include &lt;iostream&gt;
+using namespace std;
+
+const int DIMENSIUNE = 27;
+
+class CovorulSierpinski {
+private:
+    char matrice[DIMENSIUNE][DIMENSIUNE];
+
+public:
+    CovorulSierpinski() {
+        initializeaza();
+    }
+
+    void initializeaza() {
+        for (int i = 0; i &lt; DIMENSIUNE; ++i) {
+            for (int j = 0; j &lt; DIMENSIUNE; ++j) {
+                matrice[i][j] = '#';
+            }
+        }
+    }
+
+    void genereazaPrimesIteratie(int startLinie, int startColoana, int marime) {
+        if (marime &lt; 1) return;
+
+        int dimensiuneCelula = marime / 3;
+        for (int i = startLinie + dimensiuneCelula; i &lt; startLinie + 2 * dimensiuneCelula; ++i) {
+
+            for (int j = startColoana + dimensiuneCelula; j &lt; startColoana + 2 * dimensiuneCelula; ++j) {
+                matrice[i][j] = ' ';
+            }
+        }
+    }
+
+    void afiseaza() {
+        cout &lt;&lt; "Covorul lui Sierpinski \n";
+        for (int i = 0; i &lt; DIMENSIUNE; ++i) {
+            for (int j = 0; j &lt; DIMENSIUNE; ++j) {
+                cout &lt;&lt; matrice[i][j] &lt;&lt; matrice[i][j];
+            }
+            cout &lt;&lt; "\n";
+        }
+
+        cout &lt;&lt; "\n\nInformatii:\n";
+        cout &lt;&lt; "- Patratul initial este impartit in 9 parti egale (3x3)\n";
+        cout &lt;&lt; "- Patratul din mijloc este eliminat\n";
+        cout &lt;&lt; "- Patratelele ramase: 8\n";
+        cout &lt;&lt; "- Procent acoperire: " &lt;&lt; (100.0 * 8 / 9) &lt;&lt; "%\n";
+    }
+};
+
+int main() {
+    CovorulSierpinski covor;
+    covor.genereazaPrimesIteratie(0, 0, DIMENSIUNE);
+    covor.afiseaza();
+
+    return 0;
+}</pre></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="csharp" class="section">
+    <h2>C#</h2>
+    <div class="accordion-list">
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m12-panel">
+        <span class="accordion-head"><strong>m1.2 - Numere cu suma cifrelor impară și divizibilă cu 3</strong><span>C# - fișiere, validare și liste</span></span>
+        <span class="problem-label">m1.2</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="m12-panel">
+        <div class="accordion-body">
+        <p>Citire din fișier sau tastatură, filtrare 1..n și salvarea rezultatului în output.txt.</p>
+          <div class="problem-resources">
+            <div class="resource-box">
+              <div class="resource-label">OnlineGDB</div>
+              <div class="resource-slot link-slot"><a href="https://onlinegdb.com/Rkad5nrHF" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/Rkad5nrHF</a></div>
+            </div>
+            <div class="resource-box">
+              <div class="resource-label">Imagini cod rulat</div>
+              <div class="resource-slot image-slot"><a href="img/c%231.png" target="_blank" rel="noopener noreferrer"><img src="img/c%231.png" alt="Captură output C# - Numere cu suma cifrelor impară și divizibilă cu 3"></a></div>
+            </div>
+          </div>
+        <div class="code-block"><pre>using System;
+  using System.Collections.Generic;
+  using System.IO;
+
+  class Program
+  {
+    static int DigitSum(int number)
+    {
+      int sum = 0;
+      while (number > 0)
+      {
+        sum += number % 10;
+        number /= 10;
+      }
+      return sum;
+    }
+
+    static void Main()
+    {
+      int n = 0;
+      try
+      {
+        if (File.Exists("input.txt"))
+        {
+          string content = File.ReadAllText("input.txt").Trim();
+          n = int.Parse(content);
+        }
+        else
+        {
+          Console.WriteLine("Introdu n (n < 100000):");
+          n = int.Parse(Console.ReadLine());
+        }
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine("Eroare la citire: " + ex.Message);
+        return;
+      }
+
+      if (n < 1 || n >= 100000)
+      {
+        Console.WriteLine("n trebuie să fie între 1 și 99999");
+        return;
+      }
+
+      List<int> result = new List<int>();
+
+      for (int i = 1; i <= n; i++)
+      {
+        int sum = DigitSum(i);
+
+        if (sum % 2 == 1 && sum % 3 == 0)
+        {
+          result.Add(i);
+        }
+      }
+
+      Console.WriteLine("Numere cu suma cifrelor impară și divizibilă cu 3:");
+      if (result.Count == 0)
+      {
+        Console.WriteLine("Nu există numere cu această proprietate.");
+      }
+      else
+      {
+        foreach (int num in result)
+        {
+          Console.WriteLine($"{num} (suma cifrelor: {DigitSum(num)})");
+        }
+        Console.WriteLine($"\nTotal: {result.Count} numere");
+      }
+
+      try
+      {
+        using (StreamWriter writer = new StreamWriter("output.txt"))
+        {
+          foreach (int num in result)
+          {
+            writer.WriteLine(num);
+          }
+        }
+        Console.WriteLine("\nRezultatele au fost salvate în output.txt");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine("Eroare la salvare: " + ex.Message);
+      }
+    }
+  }</pre></div>
+        </div>
+      </div>
+      </article>
+
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m221-panel">
+        <span class="accordion-head"><strong>m2.21 - Maximizarea grupurilor acomodate</strong><span>C# - planificare greedy</span></span>
+        <span class="problem-label">m2.21</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="m221-panel">
+        <div class="accordion-body">
+        <p>Alege sursa datelor, sortează cererile și alocă ghizii disponibili cât mai eficient.</p>
+          <div class="problem-resources">
+            <div class="resource-box">
+              <div class="resource-label">OnlineGDB</div>
+              <div class="resource-slot link-slot"><a href="https://onlinegdb.com/HPbHwGD7s" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/HPbHwGD7s</a></div>
+            </div>
+            <div class="resource-box">
+              <div class="resource-label">Imagini cod rulat</div>
+              <div class="resource-slot image-slot"><a href="img/c%232.png" target="_blank" rel="noopener noreferrer"><img src="img/c%232.png" alt="Captură output C# - Maximizarea grupurilor acomodate"></a></div>
+            </div>
+          </div>
+        <div class="code-block"><pre>using System;
+  using System.Linq;
+  using System.IO;
+
+  class Program
+  {
+    static void Main()
+    {
+      try
+      {
+        Console.WriteLine("De unde dam input?:");
+        Console.WriteLine("1. Din fisierul date.in");
+        Console.WriteLine("2. De la tastatura");
+        Console.Write("Optiunea dvs. (1 sau 2): ");
+        string optiune = Console.ReadLine();
+
+        int k, n, m, p;
+        int[] cereri;
+
+        if (optiune == "1")
+        {
+          CitiredinFisier(out k, out n, out m, out p, out cereri);
+        }
+        else if (optiune == "2")
+        {
+          CitireDeLatastatura(out k, out n, out m, out p, out cereri);
+        }
+        else
+        {
+          return;
+        }
+
+        if (k < 1 || n < 1 || m < 1 || p < 1)
+        {
+          Console.WriteLine("Eroare: Toate valorile trebuie sa fie mai mari decat 0");
+          return;
+        }
+
+        if (cereri.Length != p)
+        {
+          Console.WriteLine("Eroare: Trebuie sa introduceti exact " + p + " date");
+          return;
+        }
+
+        Array.Sort(cereri);
+        int[] guideAvailableFrom = new int[n];
+        int accommodatedGroups = 0;
+
+        foreach (int startDate in cereri)
+        {
+          int endDate = startDate + m - 1;
+
+          if (startDate > k)
+            continue;
+
+          int bestGuide = GasesteGhidDisponibil(guideAvailableFrom, startDate);
+
+          if (bestGuide != -1)
+          {
+            guideAvailableFrom[bestGuide] = endDate + 1;
+            accommodatedGroups++;
+          }
+        }
+
+        Console.WriteLine("Numarul maxim de grupuri acomodate: " + accommodatedGroups);
+        ScriereInFisier(accommodatedGroups);
+      }
+      catch (FormatException)
+      {
+        Console.WriteLine("Eroare: Introduceti numere intregi valide");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine("Eroare: " + ex.Message);
+      }
+    }
+
+    static void CitiredinFisier(out int k, out int n, out int m, out int p, out int[] cereri)
+    {
+      string[] linii = File.ReadAllLines("date.in");
+
+      if (linii.Length < 2)
+      {
+        throw new Exception("Fisierul date.in trebuie sa contina 2 linii");
+      }
+
+      string[] firstLine = linii[0].Split();
+      k = int.Parse(firstLine[0]);
+      n = int.Parse(firstLine[1]);
+      m = int.Parse(firstLine[2]);
+      p = int.Parse(firstLine[3]);
+
+      cereri = linii[1].Split().Select(int.Parse).ToArray();
+      Console.WriteLine("Date citite din fisierul date.in");
+    }
+
+    static void CitireDeLatastatura(out int k, out int n, out int m, out int p, out int[] cereri)
+    {
+      Console.WriteLine("\nIntroduceti k, n, m, p (separate prin spatii):");
+      string[] firstLine = Console.ReadLine().Split();
+      k = int.Parse(firstLine[0]);
+      n = int.Parse(firstLine[1]);
+      m = int.Parse(firstLine[2]);
+      p = int.Parse(firstLine[3]);
+
+      Console.WriteLine("Introduceti datele de inceput pentru fiecare grup (separate prin spatii):");
+      cereri = Console.ReadLine().Split().Select(int.Parse).ToArray();
+      Console.WriteLine("Date citite de la tastatura");
+    }
+
+    static int GasesteGhidDisponibil(int[] guideAvailableFrom, int startDate)
+    {
+      int bestGuide = -1;
+      int earliestAvailability = int.MaxValue;
+
+      for (int i = 0; i < guideAvailableFrom.Length; i++)
+      {
+        if (guideAvailableFrom[i] <= startDate && guideAvailableFrom[i] < earliestAvailability)
+        {
+          bestGuide = i;
+          earliestAvailability = guideAvailableFrom[i];
+        }
+      }
+
+      return bestGuide;
+    }
+
+    static void ScriereInFisier(int rezultat)
+    {
+      try
+      {
+        File.WriteAllText("date.out", rezultat.ToString());
+        Console.WriteLine("Rezultatul a fost salvat in date.out");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine("Eroare: " + ex.Message);
+      }
+    }
+  }</pre></div>
+        </div>
+      </div>
+      </article>
+
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m315-panel">
+        <span class="accordion-head"><strong>m3.15 - Generarea combinațiilor de nume</strong><span>C# - recursivitate</span></span>
+        <span class="problem-label">m3.15</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="m315-panel">
+        <div class="accordion-body">
+        <p>Primește n nume și afișează toate combinațiile de câte p persoane.</p>
+        <div class="problem-resources">
+          <div class="resource-box">
+            <div class="resource-label">OnlineGDB</div>
+            <div class="resource-slot link-slot"><a href="https://onlinegdb.com/tRKRbPkad" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/tRKRbPkad</a></div>
+          </div>
+          <div class="resource-box">
+            <div class="resource-label">Imagini cod rulat</div>
+            <div class="resource-slot image-slot"><a href="img/c%233.png" target="_blank" rel="noopener noreferrer"><img src="img/c%233.png" alt="Captură output C# - Generarea combinațiilor de nume"></a></div>
+          </div>
+        </div>
+        <div class="code-block"><pre>using System;
+
+  string[] GetNames(int n)
+  {
+    string[] names = new string[n];
+    for (int i = 0; i < n; i++)
+    {
+      Console.Write($"Introdu numele persoanei {i + 1}: ");
+      names[i] = Console.ReadLine();
+    }
+    return names;
+  }
+
+  void GeneComb(string[] names, int p, int start, string[] current, int index)
+  {
+    if (index == p)
+    {
+      Console.WriteLine(string.Join(", ", current));
+      return;
+    }
+
+    for (int i = start; i < names.Length; i++)
+    {
+      current[index] = names[i];
+      GeneComb(names, p, i + 1, current, index + 1);
+    }
+  }
+
+  Console.Write("Introdu n (numarul de persoane): ");
+  int n = int.Parse(Console.ReadLine());
+
+  Console.Write("Introdu p (combinari de cate p): ");
+  int p = int.Parse(Console.ReadLine());
+
+  string[] names = GetNames(n);
+  string[] current = new string[p];
+
+  Console.WriteLine("\nCombinari:");
+  GeneComb(names, p, 0, current, 0);
+
+
+  Console.ReadKey();</pre></div>
+        </div>
+      </div>
+      </article>
+
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m331-panel">
+        <span class="accordion-head"><strong>m3.31 - Triunghiul cu arie maximă</strong><span>C# - geometrie analitică</span></span>
+        <span class="problem-label">m3.31</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="m331-panel">
+        <div class="accordion-body">
+        <p>Caută triplete de puncte și reține triunghiul cu aria maximă.</p>
+        <div class="problem-resources">
+          <div class="resource-box">
+            <div class="resource-label">OnlineGDB</div>
+            <div class="resource-slot link-slot"><a href="https://onlinegdb.com/IZfhlLc8Mu" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/IZfhlLc8Mu</a></div>
+          </div>
+          <div class="resource-box">
+            <div class="resource-label">Imagini cod rulat</div>
+            <div class="resource-slot image-slot"><a href="img/c%234.png" target="_blank" rel="noopener noreferrer"><img src="img/c%234.png" alt="Captură output C# - Triunghiul cu arie maximă"></a></div>
+          </div>
+        </div>
+        <div class="code-block"><pre>using System;
+  using System.Collections.Generic;
+  using System.Linq;
+
+  class Punct
+  {
+    public double X { get; set; }
+    public double Y { get; set; }
+
+    public Punct(double x, double y)
+    {
+      X = x;
+      Y = y;
+    }
+
+    public override string ToString() => $"({X}, {Y})";
+  }
+
+  class Program
+  {
+    static double CalculareArie(Punct p1, Punct p2, Punct p3)
+    {
+      return Math.Abs((p2.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p2.Y - p1.Y)) / 2.0;
+    }
+
+    static (Punct, Punct, Punct, double) GasireTriunghiMaxim(List<Punct> puncte)
+    {
+      if (puncte.Count < 3)
+        throw new ArgumentException("Sunt necesare cel puțin 3 puncte");
+
+      Punct maxP1 = null, maxP2 = null, maxP3 = null;
+      double arieMaxima = 0;
+
+      for (int i = 0; i < puncte.Count - 2; i++)
+      {
+        for (int j = i + 1; j < puncte.Count - 1; j++)
+        {
+          for (int k = j + 1; k < puncte.Count; k++)
+          {
+            double arie = CalculareArie(puncte[i], puncte[j], puncte[k]);
+
+            if (arie > arieMaxima)
+            {
+              arieMaxima = arie;
+              maxP1 = puncte[i];
+              maxP2 = puncte[j];
+              maxP3 = puncte[k];
+            }
+          }
+        }
+      }
+
+      return (maxP1, maxP2, maxP3, arieMaxima);
+    }
+
+    static void Main()
+    {
+      var puncte = new List<Punct>();
+
+      Console.Write("Nr-ul de puncte: ");
+      if (!int.TryParse(Console.ReadLine(), out int numarPuncte) || numarPuncte < 3)
+      {
+        Console.WriteLine("Eroare: CEL PUTIN 3 PUNCTE");
+        return;
+      }
+
+      for (int i = 0; i < numarPuncte; i++)
+      {
+        Console.WriteLine($"\nPunctul {i + 1}:");
+        Console.Write("  Coordonata X: ");
+        if (!double.TryParse(Console.ReadLine(), out double x))
+        {
+          Console.WriteLine("Eroare:NUMARUL NU ESTE VALID PT X.");
+          i--;
+          continue;
+        }
+
+        Console.Write("  Coordonata Y: ");
+        if (!double.TryParse(Console.ReadLine(), out double y))
+        {
+          Console.WriteLine("Eroare:NUMARUL NU ESTE VALID PT Y.");
+          i--;
+          continue;
+        }
+
+        puncte.Add(new Punct(x, y));
+      }
+
+      Console.WriteLine("\n--- Punctele introduse ---");
+      for (int i = 0; i < puncte.Count; i++)
+        Console.WriteLine($"  Punctul {i + 1}: {puncte[i]}");
+
+      var (p1, p2, p3, arieMaxima) = GasireTriunghiMaxim(puncte);
+      Console.WriteLine("Triunghiul cu arie maximă:");
+      Console.WriteLine($"  Punctele: {p1}, {p2}, {p3}");
+      Console.WriteLine($"  Aria: {arieMaxima:F2}");
+    }
+  }</pre></div>
+        </div>
+      </div>
+      </article>
+
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m66-panel">
+        <span class="accordion-head"><strong>m6.6 - Submulțimea cu suma maximă divizibilă cu n</strong><span>C# - bitmask și combinatorică</span></span>
+        <span class="problem-label">m6.6</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="m66-panel">
+        <div class="accordion-body">
+        <p>Parcurge toate submulțimile și păstrează soluția cu suma cea mai mare divizibilă cu n.</p>
+        <div class="problem-resources">
+          <div class="resource-box">
+            <div class="resource-label">OnlineGDB</div>
+            <div class="resource-slot link-slot"><a href="https://onlinegdb.com/UBGyueRti" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/UBGyueRti</a></div>
+          </div>
+          <div class="resource-box">
+            <div class="resource-label">Imagini cod rulat</div>
+            <div class="resource-slot image-slot"><a href="img/c%235.png" target="_blank" rel="noopener noreferrer"><img src="img/c%235.png" alt="Captură output C# - Submulțimea cu suma maximă divizibilă cu n"></a></div>
+          </div>
+        </div>
+        <div class="code-block"><pre>Console.WriteLine("Introduceti n (numar natural):");
+int n = int.Parse(Console.ReadLine());
+
+Console.WriteLine($"Introduceti {n} numere:");
+int[] numere = new int[n];
+for (int i = 0; i < n; i++)
+{
+    numere[i] = int.Parse(Console.ReadLine());
+}
+
+int sumaMaxima = 0;
+List<int> submulțimeMaxima = new List<int>();
+for (int masca = 0; masca < (1 << n); masca++)
+{
+    int suma = 0;
+    List<int> submultime = new List<int>();
+
+    for (int i = 0; i < n; i++)
+    {
+        if ((masca & (1 << i)) != 0)
+        {
+            suma += numere[i];
+            submultime.Add(numere[i]);
+        }
+    }
+    if (suma % n == 0 && suma > sumaMaxima)
+    {
+        sumaMaxima = suma;
+        submulțimeMaxima = submultime;
+    }
+}
+Console.WriteLine($"\nCea mai mare suma divizibila cu {n}: {sumaMaxima}");
+Console.WriteLine($"Rest: {sumaMaxima % n}");
+Console.WriteLine($"Numerele care formeaza suma: {string.Join(", ", submulțimeMaxima)}");</pre></div>
+        </div>
+      </div>
+      </article>
+
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="poo11-panel">
+        <span class="accordion-head"><strong>poo 11 - Sistem de rezervări curse aeriene</strong><span>C# - OOP și meniuri interactive</span></span>
+        <span class="problem-label">poo 11</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="poo11-panel">
+        <div class="accordion-body">
+        <p>Aplicație completă pentru rezervări, itinerarii simple și rute multi-companie.</p>
+        <div class="problem-resources">
+          <div class="resource-box">
+            <div class="resource-label">OnlineGDB</div>
+            <div class="resource-slot link-slot"><a href="https://onlinegdb.com/7rfKxPFZS" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/7rfKxPFZS</a></div>
+          </div>
+          <div class="resource-box">
+            <div class="resource-label">Imagini cod rulat</div>
+            <div class="resource-slot image-slot"><a href="img/C%236.png" target="_blank" rel="noopener noreferrer"><img src="img/C%236.png" alt="Captură output C# - Sistem de rezervări curse aeriene"></a></div>
+          </div>
+        </div>
+        <div class="code-block"><pre>using System;
+  using System.Collections.Generic;
+  using System.Linq;
+
+  public class Reservation
+  {
+    public string PersonName { get; set; }
+    public string DepartureCity { get; set; }
+    public DateTime ReservationDate { get; set; }
+    public string Destination { get; set; }
+    public List<string> Stopovers { get; set; } = new();
+    public string AirlineCompany { get; set; }
+    public decimal TicketPrice { get; set; }
+    public TicketType Type { get; set; }
+    public SeatClass SeatClass { get; set; }
+    public List<Flight> Itinerary { get; set; } = new();
+    public Guid Id { get; set; } = Guid.NewGuid();
+  }
+
+  public class Flight
+  {
+    public string FlightNumber { get; set; }
+    public string DepartureCity { get; set; }
+    public string ArrivalCity { get; set; }
+    public DateTime DepartureTime { get; set; }
+    public DateTime ArrivalTime { get; set; }
+    public string AirlineCompany { get; set; }
+    public decimal Price { get; set; }
+  }
+
+  public enum TicketType
+  {
+    DusIntors,
+    NumaiDus
+  }
+
+  public enum SeatClass
+  {
+    ClasaI,
+    Turist
+  }
+
+  public class ReservationSystem
+  {
+    private List<Reservation> reservations = new();
+
+    public void AddReservation(Reservation reservation)
+    {
+      if (reservation == null)
+        throw new ArgumentNullException(nameof(reservation));
+
+      reservations.Add(reservation);
+      Console.WriteLine($"✓ Rezervare adăugată pentru {reservation.PersonName}");
+    }
+
+    public List<Reservation> SearchByClientName(string clientName)
+    {
+      if (string.IsNullOrWhiteSpace(clientName))
+        throw new ArgumentException("Numele clientului nu poate fi gol");
+
+      var results = reservations.Where(r => r.PersonName.Equals(clientName, StringComparison.OrdinalIgnoreCase)).ToList();
+      Console.WriteLine($"✓ Găsite {results.Count} rezervare(i) pentru {clientName}");
+      return results;
+    }
+
+    public bool ModifyReservation(string clientName, DateTime reservationDate, Action<Reservation> modifications)
+    {
+      var reservation = reservations.FirstOrDefault(r =>
+        r.PersonName.Equals(clientName, StringComparison.OrdinalIgnoreCase) &&
+        r.ReservationDate.Date == reservationDate.Date);
+
+      if (reservation == null)
+      {
+        Console.WriteLine($"✗ Rezervare nu găsită pentru {clientName} pe {reservationDate:yyyy-MM-dd}");
+        return false;
+      }
+
+      modifications(reservation);
+      Console.WriteLine($"✓ Rezervare modificată pentru {clientName}");
+      return true;
+    }
+
+    public void BuildItinerary(Reservation reservation, List<Flight> flights)
+    {
+      if (flights == null || flights.Count == 0)
+        throw new ArgumentException("Cel puțin un zbor este necesar");
+
+      reservation.Itinerary = flights;
+      decimal totalPrice = flights.Sum(f => f.Price);
+      reservation.TicketPrice = totalPrice;
+      Console.WriteLine($"✓ Itinerar creat cu {flights.Count} zbor(uri). Preț total: {totalPrice}");
+    }
+
+    public List<Reservation> DisplayReservationsByAirline(string airlineCompany)
+    {
+      if (string.IsNullOrWhiteSpace(airlineCompany))
+        throw new ArgumentException("Numele companiei aeriene nu poate fi gol");
+
+      var results = reservations.Where(r =>
+        r.AirlineCompany.Equals(airlineCompany, StringComparison.OrdinalIgnoreCase)).ToList();
+
+      Console.WriteLine($"\n--- Rezervări pentru {airlineCompany} ({results.Count}) ---");
+      foreach (var res in results)
+        PrintReservation(res);
+
+      return results;
+    }
+
+    public List<Reservation> DisplayReservationsByFlight(string departureCity, DateTime departureDate)
+    {
+      var results = reservations.Where(r =>
+        r.DepartureCity.Equals(departureCity, StringComparison.OrdinalIgnoreCase) &&
+        r.ReservationDate.Date == departureDate.Date).ToList();
+
+      Console.WriteLine($"\n--- Rezervări pentru zbor din {departureCity} pe {departureDate:yyyy-MM-dd} ({results.Count}) ---");
+      foreach (var res in results)
+        PrintReservation(res);
+
+      return results;
+    }
+
+    public List<Reservation> DisplayReservationsByPersonName(string personName)
+    {
+      var results = SearchByClientName(personName);
+      Console.WriteLine($"\n--- Toate rezervările pentru {personName} ---");
+      foreach (var res in results)
+        PrintReservation(res);
+
+      return results;
+    }
+
+    public bool DeleteReservation(string personName, DateTime reservationDate)
+    {
+      var reservation = reservations.FirstOrDefault(r =>
+        r.PersonName.Equals(personName, StringComparison.OrdinalIgnoreCase) &&
+        r.ReservationDate.Date == reservationDate.Date);
+
+      if (reservation == null)
+      {
+        Console.WriteLine($"✗ Rezervare nu găsită pentru {personName} pe {reservationDate:yyyy-MM-dd}");
+        return false;
+      }
+
+      reservations.Remove(reservation);
+      Console.WriteLine($"✓ Rezervare ștearsă pentru {personName}");
+      return true;
+    }
+
+    public void BuildMultiAirlineRoute(Reservation reservation, List<Flight> flights)
+    {
+      if (flights == null || flights.Count == 0)
+        throw new ArgumentException("Cel puțin un zbor este necesar");
+
+      for (int i = 0; i < flights.Count - 1; i++)
+      {
+        if (!flights[i].ArrivalCity.Equals(flights[i + 1].DepartureCity, StringComparison.OrdinalIgnoreCase))
+        {
+          throw new ArgumentException($"Zborurile {i + 1} și {i + 2} nu sunt conectate");
+        }
+      }
+
+      var uniqueAirlines = flights.Select(f => f.AirlineCompany).Distinct().ToList();
+      reservation.Itinerary = flights;
+      decimal totalPrice = flights.Sum(f => f.Price);
+      reservation.TicketPrice = totalPrice;
+
+      Console.WriteLine($"✓ Traseu multi-companie creat cu {uniqueAirlines.Count} companie(i)");
+      Console.WriteLine($"  Companii: {string.Join(", ", uniqueAirlines)}");
+      Console.WriteLine($"  Total zboruri: {flights.Count}");
+      Console.WriteLine($"  Preț total: {totalPrice}");
+    }
+
+    private void PrintReservation(Reservation res)
+    {
+      Console.WriteLine($"\n  Nume: {res.PersonName}");
+      Console.WriteLine($"  Din: {res.DepartureCity} → Spre: {res.Destination}");
+      Console.WriteLine($"  Data rezervării: {res.ReservationDate:yyyy-MM-dd}");
+      Console.WriteLine($"  Companie aeriană: {res.AirlineCompany}");
+      Console.WriteLine($"  Preț: {res.TicketPrice}");
+      Console.WriteLine($"  Clasă: {res.SeatClass}");
+      Console.WriteLine($"  Tip: {res.Type}");
+      if (res.Stopovers.Count > 0)
+        Console.WriteLine($"  Escale: {string.Join(", ", res.Stopovers)}");
+    }
+
+    public List<Reservation> GetAllReservations() => reservations;
+  }
+
+  public class InputHelper
+  {
+    public static string ReadString(string prompt)
+    {
+      Console.Write(prompt);
+      return Console.ReadLine() ?? "";
+    }
+
+    public static DateTime ReadDate(string prompt)
+    {
+      while (true)
+      {
+        Console.Write(prompt);
+        if (DateTime.TryParse(Console.ReadLine(), out var date))
+          return date;
+        Console.WriteLine("❌ Format de dată invalid. Folosiți format: yyyy-MM-dd");
+      }
+    }
+
+    public static decimal ReadDecimal(string prompt)
+    {
+      while (true)
+      {
+        Console.Write(prompt);
+        if (decimal.TryParse(Console.ReadLine(), out var value))
+          return value;
+        Console.WriteLine("❌ Valoare numerică invalidă");
+      }
+    }
+
+    public static int ReadInt(string prompt)
+    {
+      while (true)
+      {
+        Console.Write(prompt);
+        if (int.TryParse(Console.ReadLine(), out var value))
+          return value;
+        Console.WriteLine("❌ Valoare numerică invalidă");
+      }
+    }
+
+    public static TicketType ReadTicketType(string prompt)
+    {
+      Console.WriteLine(prompt);
+      Console.WriteLine("1. Dus-întors (DusIntors)");
+      Console.WriteLine("2. Numai dus (NumaiDus)");
+
+      while (true)
+      {
+        int choice = ReadInt("Selectați (1-2): ");
+        if (choice == 1) return TicketType.DusIntors;
+        if (choice == 2) return TicketType.NumaiDus;
+        Console.WriteLine("❌ Opțiune invalidă");
+      }
+    }
+
+    public static SeatClass ReadSeatClass(string prompt)
+    {
+      Console.WriteLine(prompt);
+      Console.WriteLine("1. Clasa I");
+      Console.WriteLine("2. Turist");
+
+      while (true)
+      {
+        int choice = ReadInt("Selectați (1-2): ");
+        if (choice == 1) return SeatClass.ClasaI;
+        if (choice == 2) return SeatClass.Turist;
+        Console.WriteLine("❌ Opțiune invalidă");
+      }
+    }
+  }
+
+  class Program
+  {
+    static ReservationSystem system = new();
+
+    static void Main()
+    {
+      bool running = true;
+
+      while (running)
+      {
+        DisplayMenu();
+        int choice = InputHelper.ReadInt("Selectați o opțiune (0-9): ");
+
+        switch (choice)
+        {
+          case 1:
+            AddNewReservation();
+            break;
+          case 2:
+            SearchClient();
+            break;
+          case 3:
+            ModifyReservationMenu();
+            break;
+          case 4:
+            BuildItineraryMenu();
+            break;
+          case 5:
+            DisplayByAirline();
+            break;
+          case 6:
+            DisplayByFlight();
+            break;
+          case 7:
+            DisplayByPerson();
+            break;
+          case 8:
+            DeleteReservationMenu();
+            break;
+          case 9:
+            BuildMultiAirlineRouteMenu();
+            break;
+          case 0:
+            running = false;
+            Console.WriteLine("✓ La revedere!");
+            break;
+          default:
+            Console.WriteLine("❌ Opțiune invalidă");
+            break;
+        }
+
+        if (choice != 0)
+          Console.WriteLine("\nApăsați orice tastă pentru a continua...");
+        Console.ReadKey();
+        Console.Clear();
+      }
+    }
+
+    static void DisplayMenu()
+    {
+      Console.Clear();
+      Console.WriteLine("╔════════════════════════════════════════════╗");
+      Console.WriteLine("║   SISTEM DE REZERVĂRI CURSE AERIENE        ║");
+      Console.WriteLine("╚════════════════════════════════════════════╝");
+      Console.WriteLine();
+      Console.WriteLine("1. Adăugare rezervare nouă");
+      Console.WriteLine("2. Căutare după nume client");
+      Console.WriteLine("3. Modificare rezervare");
+      Console.WriteLine("4. Construire itinerar simplu");
+      Console.WriteLine("5. Afișare rezervări după companie aeriană");
+      Console.WriteLine("6. Afișare rezervări după curs aeriană");
+      Console.WriteLine("7. Afișare rezervări după nume persoană");
+      Console.WriteLine("8. Ștergere rezervare");
+      Console.WriteLine("9. Construire traseu multi-companie");
+      Console.WriteLine("0. Ieșire");
+      Console.WriteLine();
+    }
+
+    static void AddNewReservation()
+    {
+      Console.WriteLine("\n=== ADĂUGARE REZERVARE NOUĂ ===\n");
+
+      try
+      {
+        string personName = InputHelper.ReadString("Nume persoană: ");
+        string departureCity = InputHelper.ReadString("Oraș de plecare: ");
+        string destination = InputHelper.ReadString("Destinație: ");
+        string airlineCompany = InputHelper.ReadString("Companie aeriană: ");
+        DateTime reservationDate = InputHelper.ReadDate("Data rezervării (yyyy-MM-dd): ");
+        decimal ticketPrice = InputHelper.ReadDecimal("Preț bilet: ");
+        TicketType ticketType = InputHelper.ReadTicketType("Tip bilet:");
+        SeatClass seatClass = InputHelper.ReadSeatClass("Clasă loc:");
+
+        string stoppersInput = InputHelper.ReadString("Escale (separate prin virgulă, sau lăsați gol): ");
+        var stoppers = string.IsNullOrWhiteSpace(stoppersInput)
+          ? new List<string>()
+          : stoppersInput.Split(',').Select(s => s.Trim()).ToList();
+
+        var reservation = new Reservation
+        {
+          PersonName = personName,
+          DepartureCity = departureCity,
+          Destination = destination,
+          AirlineCompany = airlineCompany,
+          ReservationDate = reservationDate,
+          TicketPrice = ticketPrice,
+          Type = ticketType,
+          SeatClass = seatClass,
+          Stopovers = stoppers
+        };
+
+        system.AddReservation(reservation);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void SearchClient()
+    {
+      Console.WriteLine("\n=== CĂUTARE DUPĂ CLIENT ===\n");
+
+      try
+      {
+        string clientName = InputHelper.ReadString("Introduceți numele clientului: ");
+        var results = system.SearchByClientName(clientName);
+
+        if (results.Count > 0)
+        {
+          foreach (var res in results)
+            PrintFullReservation(res);
+        }
+        else
+        {
+          Console.WriteLine("Nu au fost găsite rezervări.");
+        }
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void ModifyReservationMenu()
+    {
+      Console.WriteLine("\n=== MODIFICARE REZERVARE ===\n");
+
+      try
+      {
+        string clientName = InputHelper.ReadString("Introduceți numele clientului: ");
+        DateTime reservationDate = InputHelper.ReadDate("Data rezervării (yyyy-MM-dd): ");
+
+        system.ModifyReservation(clientName, reservationDate, res =>
+        {
+          Console.WriteLine("\nCe doriți să modificați?");
+          Console.WriteLine("1. Preț bilet");
+          Console.WriteLine("2. Companie aeriană");
+          Console.WriteLine("3. Clasă loc");
+
+          int choice = InputHelper.ReadInt("Selectați (1-3): ");
+
+          switch (choice)
+          {
+            case 1:
+              res.TicketPrice = InputHelper.ReadDecimal("Nou preț: ");
+              break;
+            case 2:
+              res.AirlineCompany = InputHelper.ReadString("Noua companie aeriană: ");
+              break;
+            case 3:
+              res.SeatClass = InputHelper.ReadSeatClass("Noua clasă:");
+              break;
+            default:
+              Console.WriteLine("❌ Opțiune invalidă");
+              break;
+          }
+        });
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void BuildItineraryMenu()
+    {
+      Console.WriteLine("\n=== CONSTRUIRE ITINERAR ===\n");
+
+      try
+      {
+        string clientName = InputHelper.ReadString("Introduceți numele clientului: ");
+        DateTime reservationDate = InputHelper.ReadDate("Data rezervării (yyyy-MM-dd): ");
+
+        var reservation = system.GetAllReservations()
+          .FirstOrDefault(r => r.PersonName.Equals(clientName, StringComparison.OrdinalIgnoreCase) &&
+                      r.ReservationDate.Date == reservationDate.Date);
+
+        if (reservation == null)
+        {
+          Console.WriteLine("❌ Rezervare nu găsită");
+          return;
+        }
+
+        int numFlights = InputHelper.ReadInt("Câte zboruri conține itinerarul? ");
+        var flights = new List<Flight>();
+
+        for (int i = 0; i < numFlights; i++)
+        {
+          Console.WriteLine($"\n--- Zbor {i + 1} ---");
+          var flight = new Flight
+          {
+            FlightNumber = InputHelper.ReadString("Număr zbor: "),
+            DepartureCity = InputHelper.ReadString("Oraș plecare: "),
+            ArrivalCity = InputHelper.ReadString("Oraș sosire: "),
+            DepartureTime = InputHelper.ReadDate("Ora plecării (yyyy-MM-dd HH:mm): "),
+            ArrivalTime = InputHelper.ReadDate("Ora sosirii (yyyy-MM-dd HH:mm): "),
+            AirlineCompany = InputHelper.ReadString("Companie aeriană: "),
+            Price = InputHelper.ReadDecimal("Preț zbor: ")
+          };
+          flights.Add(flight);
+        }
+
+        system.BuildItinerary(reservation, flights);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void DisplayByAirline()
+    {
+      Console.WriteLine("\n=== AFIȘARE DUPĂ COMPANIE AERIANĂ ===\n");
+
+      try
+      {
+        string airline = InputHelper.ReadString("Introduceți compania aeriană: ");
+        system.DisplayReservationsByAirline(airline);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void DisplayByFlight()
+    {
+      Console.WriteLine("\n=== AFIȘARE DUPĂ CURS AERIANĂ ===\n");
+
+      try
+      {
+        string departureCity = InputHelper.ReadString("Orașul de plecare: ");
+        DateTime departureDate = InputHelper.ReadDate("Data plecării (yyyy-MM-dd): ");
+        system.DisplayReservationsByFlight(departureCity, departureDate);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void DisplayByPerson()
+    {
+      Console.WriteLine("\n=== AFIȘARE DUPĂ PERSOANĂ ===\n");
+
+      try
+      {
+        string personName = InputHelper.ReadString("Introduceți numele persoanei: ");
+        system.DisplayReservationsByPersonName(personName);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void DeleteReservationMenu()
+    {
+      Console.WriteLine("\n=== ȘTERGERE REZERVARE ===\n");
+
+      try
+      {
+        string personName = InputHelper.ReadString("Introduceți numele persoanei: ");
+        DateTime reservationDate = InputHelper.ReadDate("Data rezervării (yyyy-MM-dd): ");
+
+        string confirmation = InputHelper.ReadString("Sunteți sigur? (da/nu): ");
+        if (confirmation.Equals("da", StringComparison.OrdinalIgnoreCase))
+        {
+          system.DeleteReservation(personName, reservationDate);
+        }
+        else
+        {
+          Console.WriteLine("✓ Ștergere anulată");
+        }
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void BuildMultiAirlineRouteMenu()
+    {
+      Console.WriteLine("\n=== CONSTRUIRE TRASEU MULTI-COMPANIE ===\n");
+
+      try
+      {
+        string clientName = InputHelper.ReadString("Introduceți numele clientului: ");
+        DateTime reservationDate = InputHelper.ReadDate("Data rezervării (yyyy-MM-dd): ");
+
+        var reservation = system.GetAllReservations()
+          .FirstOrDefault(r => r.PersonName.Equals(clientName, StringComparison.OrdinalIgnoreCase) &&
+                      r.ReservationDate.Date == reservationDate.Date);
+
+        if (reservation == null)
+        {
+          Console.WriteLine("❌ Rezervare nu găsită");
+          return;
+        }
+
+        int numFlights = InputHelper.ReadInt("Câte zboruri conține traseul? ");
+        var flights = new List<Flight>();
+
+        for (int i = 0; i < numFlights; i++)
+        {
+          Console.WriteLine($"\n--- Zbor {i + 1} ---");
+          var flight = new Flight
+          {
+            FlightNumber = InputHelper.ReadString("Număr zbor: "),
+            DepartureCity = InputHelper.ReadString("Oraș plecare: "),
+            ArrivalCity = InputHelper.ReadString("Oraș sosire: "),
+            DepartureTime = InputHelper.ReadDate("Ora plecării (yyyy-MM-dd HH:mm): "),
+            ArrivalTime = InputHelper.ReadDate("Ora sosirii (yyyy-MM-dd HH:mm): "),
+            AirlineCompany = InputHelper.ReadString("Companie aeriană: "),
+            Price = InputHelper.ReadDecimal("Preț zbor: ")
+          };
+          flights.Add(flight);
+        }
+
+        system.BuildMultiAirlineRoute(reservation, flights);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"❌ Eroare: {ex.Message}");
+      }
+    }
+
+    static void PrintFullReservation(Reservation res)
+    {
+      Console.WriteLine($"\n┌─ Rezervare ID: {res.Id} ─┐");
+      Console.WriteLine($"│ Nume: {res.PersonName}");
+      Console.WriteLine($"│ Din: {res.DepartureCity} → Spre: {res.Destination}");
+      Console.WriteLine($"│ Data rezervării: {res.ReservationDate:yyyy-MM-dd}");
+      Console.WriteLine($"│ Companie aeriană: {res.AirlineCompany}");
+      Console.WriteLine($"│ Preț: {res.TicketPrice}");
+      Console.WriteLine($"│ Clasă: {res.SeatClass}");
+      Console.WriteLine($"│ Tip: {res.Type}");
+      if (res.Stopovers.Count > 0)
+        Console.WriteLine($"│ Escale: {string.Join(", ", res.Stopovers)}");
+      Console.WriteLine("└─────────────────────────────┘");
+    }
+  }</pre></div>
+        </div>
+      </div>
+      </article>
+
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="poo18-panel">
+        <span class="accordion-head"><strong>poo 18 - Gestiune hotel</strong><span>C# - rezervări, camere și alocare</span></span>
+        <span class="problem-label">poo 18</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="poo18-panel">
+        <div class="accordion-body">
+        <p>Gestionează camerele, rezervările, modificările și anulările pentru un hotel.</p>
+        <div class="problem-resources">
+          <div class="resource-box">
+            <div class="resource-label">OnlineGDB</div>
+            <div class="resource-slot link-slot"><a href="https://onlinegdb.com/_lC5dl_L0" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/_lC5dl_L0</a></div>
+          </div>
+          <div class="resource-box">
+            <div class="resource-label">Imagini cod rulat</div>
+            <div class="resource-slot image-slot"><a href="img/c%237.png" target="_blank" rel="noopener noreferrer"><img src="img/c%237.png" alt="Captură output C# - Gestiune hotel"></a></div>
+          </div>
+        </div>
+        <div class="code-block"><pre>using System;
+  using System.Collections.Generic;
+  using System.Linq;
+
+  class Camera
+  {
+    public int Id { get; set; }
+    public string Tip { get; set; } 
+    public int Paturi { get; set; }
+    public decimal Pret { get; set; }
+    public bool Disponibila { get; set; } = true;
+  }
+  class Hotel
+  {
+    public string Nume { get; set; }
+    public string Categorie { get; set; }
+    public List<Camera> Camere { get; set; } = new List<Camera>();
+  }
+  class Rezervare
+  {
+    public int Id { get; set; }
+    public string NumePersoana { get; set; }
+    public DateTime DataStart { get; set; }
+    public DateTime DataSfarsit { get; set; }
+    public string TipRezervaare { get; set; } 
+    public int? IdCameraAlocata { get; set; }
+    public bool Activa { get; set; } = true;
+  }
+
+  class Program
+  {
+    static Hotel hotel = new Hotel();
+    static List<Rezervare> rezervari = new List<Rezervare>();
+    static int urmatoriIdRezervare = 1;
+    static int urmatoriIdCamera = 1;
+
+    static void Main()
+    {
+      InitializeazaHotel();
+
+      while (true)
+      {
+        ArataMeniu();
+        string optiune = Console.ReadLine();
+
+        switch (optiune)
+        {
+          case "1":
+            RezervareNoua();
+            break;
+          case "2":
+            ModificareRezervare();
+            break;
+          case "3":
+            AnulareRezervare();
+            break;
+          case "4":
+            AlocareCamera();
+            break;
+          case "5":
+            ListareRezervari();
+            break;
+          case "6":
+            ListareCamere();
+            break;
+          case "0":
+            Console.WriteLine("La revedere!");
+            return;
+          default:
+            Console.WriteLine("Opțiune invalidă!");
+            break;
+        }
+      }
+    }
+
+    static void ArataMeniu()
+    {
+      Console.WriteLine("\n========== GESTIUNE HOTEL ==========");
+      Console.WriteLine("1. Adaugă o nouă rezervare");
+      Console.WriteLine("2. Modifică o rezervare existentă");
+      Console.WriteLine("3. Anulează o rezervare");
+      Console.WriteLine("4. Alocare cameră");
+      Console.WriteLine("5. Listare rezervări");
+      Console.WriteLine("6. Listare camere disponibile");
+      Console.WriteLine("0. Ieșire");
+      Console.Write("Selectează opțiune: ");
+    }
+
+    static void InitializeazaHotel()
+    {
+      Console.Write("Introduceți numele hotelului: ");
+      hotel.Nume = Console.ReadLine();
+
+      Console.Write("Introduceți categoria hotelului: ");
+      hotel.Categorie = Console.ReadLine();
+
+      Console.Write("Introduceți numărul de camere simple: ");
+      if (int.TryParse(Console.ReadLine(), out int numSimple))
+      {
+        for (int i = 0; i < numSimple; i++)
+        {
+          hotel.Camere.Add(new Camera
+          {
+            Id = urmatoriIdCamera++,
+            Tip = "Simplă",
+            Paturi = 1,
+            Pret = 100
+          });
+        }
+      }
+
+      Console.Write("Introduceți numărul de camere duble: ");
+      if (int.TryParse(Console.ReadLine(), out int numDuble))
+      {
+        for (int i = 0; i < numDuble; i++)
+        {
+          hotel.Camere.Add(new Camera
+          {
+            Id = urmatoriIdCamera++,
+            Tip = "Dublă",
+            Paturi = 2,
+            Pret = 150
+          });
+        }
+      }
+
+      Console.Write("Introduceți numărul de apartamente: ");
+      if (int.TryParse(Console.ReadLine(), out int numApartamente))
+      {
+        for (int i = 0; i < numApartamente; i++)
+        {
+          hotel.Camere.Add(new Camera
+          {
+            Id = urmatoriIdCamera++,
+            Tip = "Apartament",
+            Paturi = 4,
+            Pret = 250
+          });
+        }
+      }
+
+      Console.Write("\nIntroduceți prețul pentru camera simplă: ");
+      if (decimal.TryParse(Console.ReadLine(), out decimal pretSimple))
+      {
+        foreach (var c in hotel.Camere.Where(x => x.Tip == "Simplă"))
+          c.Pret = pretSimple;
+      }
+
+      Console.Write("Introduceți prețul pentru camera dublă: ");
+      if (decimal.TryParse(Console.ReadLine(), out decimal pretDubla))
+      {
+        foreach (var c in hotel.Camere.Where(x => x.Tip == "Dublă"))
+          c.Pret = pretDubla;
+      }
+
+      Console.Write("Introduceți prețul pentru apartament: ");
+      if (decimal.TryParse(Console.ReadLine(), out decimal pretApartament))
+      {
+        foreach (var c in hotel.Camere.Where(x => x.Tip == "Apartament"))
+          c.Pret = pretApartament;
+      }
+    }
+
+    static void RezervareNoua()
+    {
+      Console.WriteLine("\n--- ADAUGĂ REZERVARE NOUĂ ---");
+
+      var rezervare = new Rezervare { Id = urmatoriIdRezervare++ };
+
+      Console.Write("Introduceți numele persoanei: ");
+      rezervare.NumePersoana = Console.ReadLine();
+
+      Console.Write("Introduceți data de început (zi/lună/an): ");
+      if (DateTime.TryParse(Console.ReadLine(), out DateTime dataStart))
+        rezervare.DataStart = dataStart;
+      else
+      {
+        Console.WriteLine("Dată invalidă!");
+        return;
+      }
+
+      Console.Write("Introduceți data de sfârșit (zi/lună/an): ");
+      if (DateTime.TryParse(Console.ReadLine(), out DateTime dataSfarsit))
+        rezervare.DataSfarsit = dataSfarsit;
+      else
+      {
+        Console.WriteLine("Dată invalidă!");
+        return;
+      }
+
+      Console.WriteLine("Tipuri disponibile: Simplă, Dublă, Apartament");
+      Console.Write("Introduceți tipul de cameră dorit: ");
+      rezervare.TipRezervaare = Console.ReadLine();
+
+      rezervari.Add(rezervare);
+      Console.WriteLine($"Rezervare nr. {rezervare.Id} adăugată cu succes!");
+    }
+
+    static void ModificareRezervare()
+    {
+      Console.WriteLine("\n--- MODIFICĂ REZERVARE ---");
+      Console.Write("Introduceți ID-ul rezervării de modificat: ");
+
+      if (int.TryParse(Console.ReadLine(), out int id))
+      {
+        var rezervare = rezervari.FirstOrDefault(r => r.Id == id && r.Activa);
+
+        if (rezervare == null)
+        {
+          Console.WriteLine("Rezervare nu găsită!");
+          return;
+        }
+
+        Console.Write("Introduceți noul nume (actuală: " + rezervare.NumePersoana + "): ");
+        string numeNou = Console.ReadLine();
+        if (!string.IsNullOrEmpty(numeNou))
+          rezervare.NumePersoana = numeNou;
+
+        Console.Write("Introduceți noua dată de început (actuală: " + rezervare.DataStart.ToShortDateString() + "): ");
+        if (DateTime.TryParse(Console.ReadLine(), out DateTime dataStart))
+          rezervare.DataStart = dataStart;
+
+        Console.Write("Introduceți noua dată de sfârșit (actuală: " + rezervare.DataSfarsit.ToShortDateString() + "): ");
+        if (DateTime.TryParse(Console.ReadLine(), out DateTime dataSfarsit))
+          rezervare.DataSfarsit = dataSfarsit;
+
+        Console.WriteLine("Tipuri disponibile: Simplă, Dublă, Apartament");
+        Console.Write("Introduceți noul tip de cameră (actuală: " + rezervare.TipRezervaare + "): ");
+        string tipNou = Console.ReadLine();
+        if (!string.IsNullOrEmpty(tipNou))
+          rezervare.TipRezervaare = tipNou;
+
+        Console.WriteLine("Rezervare modificată cu succes!");
+      }
+      else
+      {
+        Console.WriteLine("ID invalid!");
+      }
+    }
+
+    static void AnulareRezervare()
+    {
+      Console.WriteLine("\n--- ANULEAZĂ REZERVARE ---");
+      Console.Write("Introduceți ID-ul rezervării de anulat: ");
+
+      if (int.TryParse(Console.ReadLine(), out int id))
+      {
+        var rezervare = rezervari.FirstOrDefault(r => r.Id == id && r.Activa);
+
+        if (rezervare == null)
+        {
+          Console.WriteLine("Rezervare nu găsită!");
+          return;
+        }
+
+        Console.Write("Sigur doriți să anulați această rezervare? (d/n): ");
+        if (Console.ReadLine().ToLower() == "d")
+        {
+          rezervare.Activa = false;
+          if (rezervare.IdCameraAlocata.HasValue)
+          {
+            var camera = hotel.Camere.FirstOrDefault(c => c.Id == rezervare.IdCameraAlocata.Value);
+            if (camera != null)
+              camera.Disponibila = true;
+          }
+          Console.WriteLine("Rezervare anulată cu succes!");
+        }
+      }
+      else
+      {
+        Console.WriteLine("ID invalid!");
+      }
+    }
+
+    static void AlocareCamera()
+    {
+      Console.WriteLine("\n--- ALOCARE CAMERĂ ---");
+      Console.Write("Introduceți ID-ul rezervării: ");
+
+      if (int.TryParse(Console.ReadLine(), out int id))
+      {
+        var rezervare = rezervari.FirstOrDefault(r => r.Id == id && r.Activa);
+
+        if (rezervare == null)
+        {
+          Console.WriteLine("Rezervare nu găsită!");
+          return;
+        }
+
+        var camereDisponibile = hotel.Camere
+          .Where(c => c.Disponibila && c.Tip == rezervare.TipRezervaare)
+          .ToList();
+
+        if (camereDisponibile.Count == 0)
+        {
+          Console.WriteLine("Nu sunt camere disponibile de acest tip!");
+          return;
+        }
+
+        var camera = camereDisponibile.First();
+        rezervare.IdCameraAlocata = camera.Id;
+        camera.Disponibila = false;
+
+        Console.WriteLine($"Cameră nr. {camera.Id} alocată cu succes!");
+        Console.WriteLine($"Tip: {camera.Tip}, Paturi: {camera.Paturi}, Preț: {camera.Pret}");
+      }
+      else
+      {
+        Console.WriteLine("ID invalid!");
+      }
+    }
+
+    static void ListareRezervari()
+    {
+      Console.WriteLine("\n--- REZERVĂRI ACTIVE ---");
+      var rezervariActive = rezervari.Where(r => r.Activa).ToList();
+
+      if (rezervariActive.Count == 0)
+      {
+        Console.WriteLine("Nu sunt rezervări active!");
+        return;
+      }
+
+      foreach (var r in rezervariActive)
+      {
+        Console.WriteLine($"\nID: {r.Id}");
+        Console.WriteLine($"Nume: {r.NumePersoana}");
+        Console.WriteLine($"Data: {r.DataStart.ToShortDateString()} - {r.DataSfarsit.ToShortDateString()}");
+        Console.WriteLine($"Tip cameră: {r.TipRezervaare}");
+        Console.WriteLine($"Cameră alocată: {(r.IdCameraAlocata.HasValue ? r.IdCameraAlocata.Value.ToString() : "Nu")}");
+      }
+    }
+
+    static void ListareCamere()
+    {
+      Console.WriteLine($"\n--- HOTEL: {hotel.Nume} ({hotel.Categorie}) ---");
+      Console.WriteLine("Camere disponibile:");
+
+      var camereDisponibile = hotel.Camere.Where(c => c.Disponibila).ToList();
+
+      if (camereDisponibile.Count == 0)
+      {
+        Console.WriteLine("Nu sunt camere disponibile!");
+        return;
+      }
+
+      foreach (var c in camereDisponibile)
+      {
+        Console.WriteLine($"ID: {c.Id} | Tip: {c.Tip} | Paturi: {c.Paturi} | Preț: {c.Pret}");
+      }
+    }
+  }</pre></div>
+        </div>
+      </div>
+      </article>
+
+      <article class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="poo21-panel">
+        <span class="accordion-head"><strong>poo 21 - Depozit de produse pentru supermarket</strong><span>C# - generic, fișiere și operații pe stoc</span></span>
+        <span class="problem-label">poo 21</span>
+        <span class="toggle-chip">+</span>
+      </button>
+      <div class="accordion-panel" id="poo21-panel">
+        <div class="accordion-body">
+        <p>Încarcă produse din fișier, salvează modificările și gestionează vânzări și căutări.</p>
+        <div class="problem-resources">
+          <div class="resource-box">
+            <div class="resource-label">OnlineGDB</div>
+            <div class="resource-slot link-slot"><a href="https://onlinegdb.com/E_ahed0_o" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/E_ahed0_o</a></div>
+          </div>
+          <div class="resource-box">
+            <div class="resource-label">Imagini cod rulat</div>
+            <div class="resource-slot image-slot"><a href="img/c%238.png" target="_blank" rel="noopener noreferrer"><img src="img/c%238.png" alt="Captură output C# - Depozit de produse pentru supermarket"></a></div>
+          </div>
+        </div>
+        <div class="code-block"><pre>using System;
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Linq;
+
+  class Produs
+  {
+    public string Cod { get; set; }
+    public string Furnizor { get; set; }
+    public string Unitatea { get; set; }
+    public decimal Pret { get; set; }
+    public decimal Adaos { get; set; }
+    public int Cantitate { get; set; }
+    public DateTime TermenValabilitate { get; set; }
+    public string Categoria { get; set; }
+
+    public Produs(string cod, string furnizor, string unitatea, decimal pret, decimal adaos, int cantitate, DateTime termenValabilitate, string categoria)
+    {
+      Cod = cod;
+      Furnizor = furnizor;
+      Unitatea = unitatea;
+      Pret = pret;
+      Adaos = adaos;
+      Cantitate = cantitate;
+      TermenValabilitate = termenValabilitate;
+      Categoria = categoria;
+    }
+
+    public decimal CalcularePretVanzare()
+    {
+      return Pret + (Pret * Adaos / 100);
+    }
+
+    public override string ToString()
+    {
+      return $"Cod: {Cod}, Furnizor: {Furnizor}, Unitate: {Unitatea}, Preț Furnizor: {Pret}€, Adaos: {Adaos}%, Cantitate: {Cantitate}, Termen: {TermenValabilitate:dd/MM/yyyy}, Categoria: {Categoria}";
+    }
+  }
+
+  class Depozit<T> where T : Produs
+  {
+    private List<T> produse;
+    private string fisier;
+
+    public Depozit(string numeFisier)
+    {
+      produse = new List<T>();
+      fisier = numeFisier;
+      IncarcaProduse();
+    }
+
+    private void IncarcaProduse()
+    {
+      if (!File.Exists(fisier))
+      {
+        Console.WriteLine("Fișierul nu există. Se va crea o bază de date goală.");
+        return;
+      }
+
+      try
+      {
+        using (StreamReader reader = new StreamReader(fisier))
+        {
+          string linie;
+          while ((linie = reader.ReadLine()) != null)
+          {
+            if (string.IsNullOrWhiteSpace(linie)) continue;
+
+            string[] parti = linie.Split(',');
+            if (parti.Length < 8) continue;
+
+            if (DateTime.TryParse(parti[6], out DateTime termen) &&
+              decimal.TryParse(parti[3], out decimal pret) &&
+              decimal.TryParse(parti[4], out decimal adaos) &&
+              int.TryParse(parti[5], out int cantitate))
+            {
+              T produs = (T)Activator.CreateInstance(typeof(T),
+                parti[0], parti[1], parti[2], pret, adaos, cantitate, termen, parti[7]);
+              produse.Add(produs);
+            }
+          }
+        }
+        Console.WriteLine($"S-au încărcat {produse.Count} produse din fișier.");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Eroare la încărcarea fișierului: {ex.Message}");
+      }
+    }
+
+    public void SalveazaProduse()
+    {
+      try
+      {
+        using (StreamWriter writer = new StreamWriter(fisier))
+        {
+          foreach (var produs in produse)
+          {
+            writer.WriteLine($"{produs.Cod},{produs.Furnizor},{produs.Unitatea},{produs.Pret},{produs.Adaos},{produs.Cantitate},{produs.TermenValabilitate:dd/MM/yyyy},{produs.Categoria}");
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Eroare la salvarea fișierului: {ex.Message}");
+      }
+    }
+
+    public void AdaugaProdus(T produs)
+    {
+      produse.Add(produs);
+      SalveazaProduse();
+      Console.WriteLine($"Produsul {produs.Cod} a fost adăugat cu succes.");
+    }
+
+    public List<T> Cauta(Func<T, bool> predicat)
+    {
+      return produse.Where(predicat).ToList();
+    }
+
+    public List<T> CautaPeFurnizor(string furnizor)
+    {
+      return Cauta(p => p.Furnizor.Equals(furnizor, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public void StergeProdusulExpired()
+    {
+      DateTime azi = DateTime.Now;
+      int count = produse.RemoveAll(p => p.TermenValabilitate < azi);
+      SalveazaProduse();
+      Console.WriteLine($"S-au șters {count} produse cu termen expirat.");
+    }
+
+    public void VindeProds(string cod)
+    {
+      T produs = produse.FirstOrDefault(p => p.Cod == cod);
+      if (produs == null)
+      {
+        Console.WriteLine("Produsul nu a fost găsit.");
+        return;
+      }
+
+      if (produs.Cantitate > 0)
+      {
+        produs.Cantitate--;
+        SalveazaProduse();
+        Console.WriteLine($"Vânzare reușită. Cantitate rămasă: {produs.Cantitate}");
+      }
+      else
+      {
+        Console.WriteLine("Stoc insuficient.");
+      }
+    }
+
+    public void AfiseazaPret(string categoria)
+    {
+      var produseCategorie = Cauta(p => p.Categoria.Equals(categoria, StringComparison.OrdinalIgnoreCase));
+
+      if (produseCategorie.Count == 0)
+      {
+        Console.WriteLine($"Nu au fost găsite produse din categoria: {categoria}");
+        return;
+      }
+
+      Console.WriteLine($"\n--- Preturi pentru categoria: {categoria} ---");
+      foreach (var produs in produseCategorie)
+      {
+        Console.WriteLine($"Cod: {produs.Cod}, Preț Vânzare: {produs.CalcularePretVanzare()}€, Stoc: {produs.Cantitate}");
+      }
+    }
+
+    public void AfisazaTot()
+    {
+      if (produse.Count == 0)
+      {
+        Console.WriteLine("Nu sunt produse în depozit.");
+        return;
+      }
+
+      Console.WriteLine("\n--- INVENTAR DEPOZIT ---");
+      foreach (var produs in produse)
+      {
+        Console.WriteLine(produs);
+      }
+    }
+
+    public List<T> DaLista()
+    {
+      return produse;
+    }
+  }
+
+  class Program
+  {
+    static void Main()
+    {
+      Depozit<Produs> depozit = new Depozit<Produs>("produse.txt");
+      bool activ = true;
+
+      while (activ)
+      {
+        Console.WriteLine("\n========== MENIU SUPERMARKET ==========");
+        Console.WriteLine("1. Adăugare produs");
+        Console.WriteLine("2. Căutare produs de la furnizor");
+        Console.WriteLine("3. Ștergere produse expirate");
+        Console.WriteLine("4. Vânzare produs");
+        Console.WriteLine("5. Calcul preț vânzare pe categorie");
+        Console.WriteLine("6. Ieșire");
+        Console.WriteLine("========================================");
+        Console.Write("Selectați opțiunea: ");
+
+        string optiune = Console.ReadLine();
+
+        switch (optiune)
+        {
+          case "1":
+            AdaugaProdus(depozit);
+            break;
+          case "2":
+            CautaPeFurnizor(depozit);
+            break;
+          case "3":
+            depozit.StergeProdusulExpired();
+            break;
+          case "4":
+            VindeProds(depozit);
+            break;
+          case "5":
+            CalcularePret(depozit);
+            break;
+          case "6":
+            activ = false;
+            Console.WriteLine("La revedere!");
+            break;
+          default:
+            Console.WriteLine("Opțiune invalidă.");
+            break;
+        }
+      }
+    }
+
+    static void AdaugaProdus(Depozit<Produs> depozit)
+    {
+      Console.WriteLine("\n--- Adăugare Produs ---");
+      Console.Write("Cod produs: ");
+      string cod = Console.ReadLine();
+
+      Console.Write("Furnizor: ");
+      string furnizor = Console.ReadLine();
+
+      Console.Write("Unitate de măsură: ");
+      string unitatea = Console.ReadLine();
+
+      Console.Write("Preț furnizor: ");
+      if (!decimal.TryParse(Console.ReadLine(), out decimal pret))
+      {
+        Console.WriteLine("Preț invalid.");
+        return;
+      }
+
+      Console.Write("Adaos (%): ");
+      if (!decimal.TryParse(Console.ReadLine(), out decimal adaos))
+      {
+        Console.WriteLine("Adaos invalid.");
+        return;
+      }
+
+      Console.Write("Cantitate: ");
+      if (!int.TryParse(Console.ReadLine(), out int cantitate))
+      {
+        Console.WriteLine("Cantitate invalidă.");
+        return;
+      }
+
+      Console.Write("Termen valabilitate (dd/MM/yyyy): ");
+      if (!DateTime.TryParse(Console.ReadLine(), out DateTime termen))
+      {
+        Console.WriteLine("Dată invalidă.");
+        return;
+      }
+
+      Console.Write("Categoria (Alimentare/Cosmetice/Băuturi): ");
+      string categoria = Console.ReadLine();
+
+      Produs produs = new Produs(cod, furnizor, unitatea, pret, adaos, cantitate, termen, categoria);
+      depozit.AdaugaProdus(produs);
+    }
+
+    static void CautaPeFurnizor(Depozit<Produs> depozit)
+    {
+      Console.WriteLine("\n--- Căutare Produs pe Furnizor ---");
+      Console.Write("Introduceți furnizorul: ");
+      string furnizor = Console.ReadLine();
+
+      var rezultate = depozit.CautaPeFurnizor(furnizor);
+      if (rezultate.Count == 0)
+      {
+        Console.WriteLine($"Nu au fost găsite produse de la furnizorul: {furnizor}");
+        return;
+      }
+
+      Console.WriteLine($"\n--- Produse de la {furnizor} ---");
+      foreach (var produs in rezultate)
+      {
+        Console.WriteLine(produs);
+      }
+    }
+
+    static void VindeProds(Depozit<Produs> depozit)
+    {
+      Console.WriteLine("\n--- Vânzare Produs ---");
+      Console.Write("Introduceți codul produsului: ");
+      string cod = Console.ReadLine();
+
+      depozit.VindeProds(cod);
+    }
+
+    static void CalcularePret(Depozit<Produs> depozit)
+    {
+      Console.WriteLine("\n--- Calcul Preț Vânzare ---");
+      Console.WriteLine("Categorii disponibile: Alimentare, Cosmetice, Băuturi");
+      Console.Write("Selectați categoria: ");
+      string categoria = Console.ReadLine();
+
+      depozit.AfiseazaPret(categoria);
+    }
+  }</pre></div>
+        </div>
+      </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="java" class="section">
+    <h2>Java</h2>
+    <div class="accordion-list">
+      <article class="accordion-item">
+        <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m621-panel">
+          <span class="toggle-left"><strong>m6.21 - Numărarea modurilor de evaluare true</strong><span>Java - programare dinamică pe expresii booleene</span></span>
+          <span class="problem-label">m6.21</span>
+          <span class="chevron">⌄</span>
+        </button>
+        <div class="accordion-panel" id="m621-panel">
+          <div class="accordion-body">
+            <p>Calculează câte moduri există pentru ca o expresie booleană cu and, or și xor să fie evaluată ca true.</p>
+            <div class="problem-resources">
+              <div class="resource-box">
+                <div class="resource-label">OnlineGDB</div>
+                <div class="resource-slot link-slot"><a href="https://onlinegdb.com/4CJv1XKXo" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/4CJv1XKXo</a></div>
+              </div>
+              <div class="resource-box">
+                <div class="resource-label">Imagini cod rulat</div>
+                <div class="resource-slot image-slot"><a href="img/java.png" target="_blank" rel="noopener noreferrer"><img src="img/java.png" alt="Captură output Java - Numărarea modurilor de evaluare true"></a></div>
+              </div>
+            </div>
+            <div class="code-block"><pre>import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    public static long countTrueWays(String line) {
+        if (line == null) return 0;
+        line = line.trim();
+        if (line.isEmpty()) return 0;
+
+        String[] tokens = line.split("\\s+");
+        List&lt;Boolean&gt; vals = new ArrayList&lt;&gt;();
+        List&lt;String&gt; ops = new ArrayList&lt;&gt;();
+
+        for (int i = 0; i &lt; tokens.length; i++) {
+            String t = tokens[i].toLowerCase();
+            if (i % 2 == 0) {
+                if (t.equals("true")) vals.add(Boolean.TRUE);
+                else if (t.equals("false")) vals.add(Boolean.FALSE);
+                else throw new IllegalArgumentException("Expected boolean literal at token " + i + ": " + tokens[i]);
+            } else {
+                if (t.equals("and") || t.equals("or") || t.equals("xor")) ops.add(t);
+                else throw new IllegalArgumentException("Expected operator at token " + i + ": " + tokens[i]);
+            }
+        }
+
+        int n = vals.size();
+        if (n == 0) return 0;
+
+        long[][] t = new long[n][n];
+        long[][] f = new long[n][n];
+
+        for (int i = 0; i &lt; n; i++) {
+            t[i][i] = vals.get(i) ? 1 : 0;
+            f[i][i] = vals.get(i) ? 0 : 1;
+        }
+
+        for (int len = 2; len &lt;= n; len++) {
+            for (int i = 0; i &lt;= n - len; i++) {
+                int j = i + len - 1;
+                long trueWays = 0;
+                long falseWays = 0;
+
+                for (int k = i; k &lt; j; k++) {
+                    String op = ops.get(k);
+                    long leftT = t[i][k];
+                    long leftF = f[i][k];
+                    long rightT = t[k + 1][j];
+                    long rightF = f[k + 1][j];
+
+                    long totalLeft = leftT + leftF;
+                    long totalRight = rightT + rightF;
+
+                    if (op.equals("and")) {
+                        trueWays += leftT * rightT;
+                        falseWays += totalLeft * totalRight - leftT * rightT;
+                    } else if (op.equals("or")) {
+                        falseWays += leftF * rightF;
+                        trueWays += totalLeft * totalRight - leftF * rightF;
+                    } else if (op.equals("xor")) {
+                        trueWays += leftT * rightF + leftF * rightT;
+                        falseWays += leftT * rightT + leftF * rightF;
+                    }
+                }
+
+                t[i][j] = trueWays;
+                f[i][j] = falseWays;
+            }
+        }
+
+        return t[0][n - 1];
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
+        if (line == null) return;
+        long ways;
+        try {
+            ways = countTrueWays(line);
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Invalid expression: " + ex.getMessage());
+            return;
+        }
+        System.out.println(ways);
+    }
+}</pre></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="python" class="section">
+    <h2>Python</h2>
+    <div class="accordion-list">
+      <article class="accordion-item">
+        <button class="accordion-toggle" type="button" aria-expanded="false" aria-controls="m410-panel">
+          <span class="toggle-left"><strong>m4.10 - Generarea anagramelor</strong><span>Python - backtracking</span></span>
+          <span class="problem-label">m4.10</span>
+          <span class="chevron">⌄</span>
+        </button>
+        <div class="accordion-panel" id="m410-panel">
+          <div class="accordion-body">
+            <p>Generează toate anagramele unui cuvânt folosind backtracking și pozițiile deja folosite.</p>
+            <div class="problem-resources">
+              <div class="resource-box">
+                <div class="resource-label">OnlineGDB</div>
+                <div class="resource-slot link-slot"><a href="https://onlinegdb.com/PFK7o4GWX" target="_blank" rel="noopener noreferrer">https://onlinegdb.com/PFK7o4GWX</a></div>
+              </div>
+              <div class="resource-box">
+                <div class="resource-label">Imagini cod rulat</div>
+                <div class="resource-slot image-slot"><a href="img/python.png" target="_blank" rel="noopener noreferrer"><img src="img/python.png" alt="Captură output Python - Generarea anagramelor"></a></div>
+              </div>
+            </div>
+            <div class="code-block"><pre>def generate_anagrams(word: str) -&gt; None:
+    used = [False] * len(word)
+    current = []
+
+    def backtrack() -&gt; None:
+        if len(current) == len(word):
+            print("".join(current))
+            return
+        for index, letter in enumerate(word):
+            if not used[index]:
+                used[index] = True
+                current.append(letter)
+                backtrack()
+                current.pop()
+                used[index] = False
+
+    backtrack()
+
+
+if __name__ == "__main__":
+    word = input("Introdu un cuvânt: ").strip()
+    print(f"Anagramele cuvântului '{word}' sunt:")
+    generate_anagrams(word)</pre></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer style="background:var(--ink);padding:1.5rem;text-align:center;color:rgba(255,255,255,.6)">Malachi Matei · Practică · 2026</footer>
+
+<script>
+document.querySelectorAll('.accordion-item').forEach((item) => {
+  const button = item.querySelector('.accordion-toggle');
+  const chip = item.querySelector('.toggle-chip');
+
+  button.addEventListener('click', () => {
+    const open = !item.classList.contains('is-open');
+    item.classList.toggle('is-open', open);
+    button.setAttribute('aria-expanded', String(open));
+    chip.textContent = open ? '−' : '+';
+  });
+});
+</script>
+
+</body>
+</html>

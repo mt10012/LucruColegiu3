@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Declarație — Asumarea răspunderii</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#faf9f6;--surface:#ffffff;--card:#f5f3ef;--border:#e0ddd6;--ink:#1a1916;--muted:#7a776e;--accent:#c44b1f;--accent2:#1f6bc4}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+nav.cv-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:rgba(26,28,36,0.95);border-bottom:1px solid rgba(0,0,0,.12);padding:0 2rem}
+.cv-nav .nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.75);letter-spacing:.05em}
+.nav-brand span{color:#5b8dee}
+.nav-links{display:flex;gap:1rem}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.75);text-decoration:none;transition:color .2s;letter-spacing:.04em;padding:12px}
+.nav-links a:hover{color:#fff}
+.hero{background:var(--ink);padding:4.5rem 2rem 3rem;position:relative;overflow:hidden}
+.hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:1}
+.hero-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);background:rgba(196,75,31,.15);border:1px solid rgba(196,75,31,.3);padding:4px 12px;border-radius:3px;letter-spacing:.08em;margin-bottom:1.5rem}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:300;color:#fff;line-height:1.1;margin-bottom:1rem}
+.hero-desc{font-size:1rem;color:rgba(255,255,255,.55);max-width:760px;margin-bottom:1.5rem;font-weight:300;line-height:1.6}
+.container{max-width:760px;margin:0 auto;padding:2rem}
+.section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1rem 0}
+.decl-text{font-size:1.02rem;color:var(--ink);line-height:1.8;margin-bottom:1.5rem}
+.highlight{background: #fff59d;padding:0 6px;border-radius:4px}
+.fields{margin-top:1.5rem}
+.field-line{margin:0.9rem 0;font-weight:500}
+.field-line .label{color:var(--muted);display:block;margin-bottom:0.35rem;font-family:'IBM Plex Mono',monospace;font-size:12px}
+.signature{height:2rem;border-bottom:2px solid var(--ink);width:60%}
+.meta-note{font-size:0.9rem;color:var(--muted);margin-top:1rem}
+ .sig-img{height:3.2rem;display:inline-block;object-fit:contain}
+footer{padding:2rem;text-align:center;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+@media(max-width:620px){.hero h1{font-size:1.5rem}}
+</style>
+</head>
+<body>
+
+<nav class="cv-nav">
+    <div class="nav-inner">
+        <span class="nav-brand"><span>//</span> malachi-matei.cv</span>
+        <div class="nav-links">
+            <a href="polimorfism-static-cs.html">Polimorfism</a>
+            <a href="practica-probleme.html">Probleme Practică</a>
+            <a href="asumarea-raspunderii.html" class="active">Asumare responsabilitate</a>
+            <a href="index.html">Curriculum Vitae</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-pill">Document · Practică</div>
+    <h1>Declarația privind<br>asumarea răspunderii</h1>
+    <p class="hero-desc">Document pentru raportul de practică — semnare și confirmare că materialele prezentate sunt proprii.</p>
+  </div>
+</div>
+
+<main class="container">
+  <section class="section">
+    <p class="decl-text">Subsemnatul, <span class="highlight">Malachi Matei</span>, declar pe proprie răspundere că materialele prezentate în raport se referă la propriile activități și realizări; în caz contrar urmează să suport consecințele, în conformitate cu legislația în vigoare.</p>
+
+    <div class="fields">
+      <div class="field-line"><span class="label">Data</span><span>25.05.2026</span></div>
+      <div class="field-line"><span class="label">Nume, Prenume</span><span>Malachi Matei</span></div>
+      <div class="field-line"><span class="label">Semnătura</span><span class="signature"><img src="img/semnatura.png" alt="Semnătura" class="sig-img"></span></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>2026 Malachi Matei </div>
+</footer>
+
+</body>
+</html>

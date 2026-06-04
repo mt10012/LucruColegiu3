@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polimorfism Static în C# — DW2412</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#faf9f6;
+--surface:#ffffff;
+--card:#f5f3ef;
+--border:#e0ddd6;
+--border2:#ccc9c0;
+--ink:#1a1916;
+--muted:#7a776e;
+--accent:#c44b1f;
+--accent2:#1f6bc4;
+--accent3:#1f9c4b;
+--code-bg:#1e1c19;
+--code-text:#e8e4dc;
+--tag-bg:#ffeee8;
+--tag-color:#c44b1f;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+
+.topbar{background:var(--ink);padding:0 2rem}
+.topbar-inner{max-width:960px;margin:0 auto;height:48px;display:flex;align-items:center;justify-content:space-between}
+.topbar-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.06em}
+.topbar-label span{color:rgba(255,255,255,.85)}
+.topbar-nav{display:flex;gap:0}
+.topbar-nav a{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.45);text-decoration:none;padding:0 14px;height:48px;display:flex;align-items:center;transition:color .2s,background .2s;letter-spacing:.04em}
+.topbar-nav a:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.06)}
+.topbar-nav a.active{color:#fff;border-bottom:2px solid var(--accent)}
+
+/* CV navbar styles (copied from CV) */
+nav.cv-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:rgba(26,28,36,0.95);border-bottom:1px solid rgba(0,0,0,.12);padding:0 2rem}
+.cv-nav .nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.75);letter-spacing:.05em}
+.nav-brand span{color:#5b8dee}
+.nav-links{display:flex;gap:1rem}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.75);text-decoration:none;transition:color .2s;letter-spacing:.04em;padding:12px}
+.nav-links a:hover{color:#fff}
+
+.hero{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px)}
+.hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:1}
+.hero-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);background:rgba(196,75,31,.15);border:1px solid rgba(196,75,31,.3);padding:4px 12px;border-radius:3px;letter-spacing:.08em;margin-bottom:1.5rem}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;color:#fff;line-height:1.1;margin-bottom:1rem}
+.hero h1 em{font-style:italic;color:#f0c090}
+.hero-desc{font-size:1.05rem;color:rgba(255,255,255,.55);max-width:600px;margin-bottom:2rem;font-weight:300;line-height:1.7}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap}
+.meta-item{font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:6px}
+.meta-item svg{width:13px;height:13px;opacity:.6}
+
+.page-tabs{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;overflow-x:auto}
+.tabs-inner{max-width:960px;margin:0 auto;display:flex;padding:0 2rem}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);padding:0 20px;height:46px;display:flex;align-items:center;border-bottom:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap;letter-spacing:.04em;background:none;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+.page{display:none;max-width:960px;margin:0 auto;padding:3rem 2rem 6rem}
+.page.active{display:block}
+
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:3rem}
+.info-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
+.info-box.accent-left{border-left:3px solid var(--accent)}
+.info-box.accent-left2{border-left:3px solid var(--accent2)}
+.box-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem}
+.box-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:.5rem}
+.box-text{font-size:.9rem;color:var(--muted);line-height:1.7}
+
+h2.sec{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:300;margin-bottom:.5rem;margin-top:3rem}
+h2.sec:first-child{margin-top:0}
+.sec-lead{font-size:1rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.7;max-width:720px}
+
+h3.sub{font-size:1rem;font-weight:500;margin-bottom:.75rem;margin-top:2rem;display:flex;align-items:center;gap:.5rem}
+h3.sub .num{font-family:'IBM Plex Mono',monospace;font-size:.75rem;background:var(--accent);color:#fff;padding:2px 7px;border-radius:3px}
+h3.sub .num2{background:var(--accent2)}
+h3.sub .num3{background:var(--accent3)}
+
+.code-block{background:var(--code-bg);border-radius:8px;overflow:hidden;margin:1rem 0 1.5rem;font-family:'IBM Plex Mono',monospace;font-size:.82rem}
+.code-header{background:rgba(255,255,255,.05);padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
+.code-filename{color:rgba(255,255,255,.5);font-size:.75rem;letter-spacing:.04em}
+.code-lang{background:rgba(196,75,31,.25);color:#f0a080;padding:2px 8px;border-radius:3px;font-size:.7rem;letter-spacing:.06em}
+pre{padding:1.25rem 1.25rem;overflow-x:auto;line-height:1.7;color:var(--code-text)}
+.k{color:#f0a080}
+.t{color:#80c8f0}
+.s{color:#a8e08a}
+.c{color:#666}
+.n{color:#f0d890}
+.m{color:#c0a0f0}
+.p{color:var(--code-text)}
+
+.explain-box{background:linear-gradient(135deg,#fff9f6,#fff);border:1px solid #f0d8cc;border-left:3px solid var(--accent);border-radius:8px;padding:1.25rem 1.5rem;margin:1rem 0 1.5rem}
+.explain-box .explain-head{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-bottom:.5rem;letter-spacing:.06em}
+.explain-box p{font-size:.9rem;line-height:1.7;color:#5a4a3a}
+
+.explain-box.blue{background:linear-gradient(135deg,#f5f9ff,#fff);border-left-color:var(--accent2);border-color:#ccd8f0}
+.explain-box.blue .explain-head{color:var(--accent2)}
+.explain-box.blue p{color:#3a4a5a}
+
+.explain-box.green{background:linear-gradient(135deg,#f4fbf6,#fff);border-left-color:var(--accent3);border-color:#c0e8cc}
+.explain-box.green .explain-head{color:var(--accent3)}
+.explain-box.green p{color:#2a4a3a}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.compare-card{border-radius:8px;padding:1.25rem;border:1px solid var(--border)}
+.compare-card.static{background:#fff9f6;border-color:#f0d8cc}
+.compare-card.dynamic{background:#f5f9ff;border-color:#ccd8f0}
+.compare-title{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;margin-bottom:.75rem;letter-spacing:.06em}
+.compare-card.static .compare-title{color:var(--accent)}
+.compare-card.dynamic .compare-title{color:var(--accent2)}
+.compare-list{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.compare-list li{font-size:.85rem;color:var(--muted);padding-left:1.1rem;position:relative}
+.compare-list li::before{content:'→';position:absolute;left:0;font-size:.75rem;top:.05em}
+
+.timeline{display:flex;flex-direction:column;gap:0;position:relative;margin:1.5rem 0}
+.timeline::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item{display:flex;gap:1.5rem;padding:0 0 2rem}
+.tl-dot{width:45px;height:45px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:.7rem;font-weight:500;position:relative;z-index:1;background:var(--surface);border:2px solid var(--border)}
+.tl-dot.r{background:#fff0ec;border-color:#f0c0a0;color:var(--accent)}
+.tl-dot.b{background:#eef3ff;border-color:#b0c8f0;color:var(--accent2)}
+.tl-dot.g{background:#eef8f1;border-color:#a0d8b0;color:var(--accent3)}
+.tl-content{}
+.tl-title{font-weight:500;font-size:.95rem;margin-bottom:.25rem}
+.tl-text{font-size:.875rem;color:var(--muted);line-height:1.7}
+
+.analogy-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin:1rem 0;display:flex;gap:1.5rem;align-items:flex-start}
+.analogy-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.5rem;background:var(--card)}
+.analogy-content .analogy-title{font-weight:500;margin-bottom:.35rem}
+.analogy-content .analogy-text{font-size:.875rem;color:var(--muted);line-height:1.7}
+
+.recap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.5rem 0}
+.recap-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;text-align:center}
+.recap-card .rc-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:300;line-height:1;margin-bottom:.5rem}
+.recap-card .rc-label{font-size:.8rem;color:var(--muted)}
+.rc-red{color:var(--accent)}
+.rc-blue{color:var(--accent2)}
+.rc-green{color:var(--accent3)}
+
+.quiz-wrap{margin:2rem 0}
+.quiz-q{font-weight:500;font-size:.95rem;margin-bottom:1rem}
+.quiz-opts{display:flex;flex-direction:column;gap:.5rem}
+.quiz-opt{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;cursor:pointer;font-size:.875rem;transition:border-color .2s,background .2s;text-align:left}
+.quiz-opt:hover{border-color:var(--border2);background:var(--card)}
+.quiz-opt.correct{background:#eef8f1;border-color:var(--accent3);color:#1f6b3a}
+.quiz-opt.wrong{background:#fff0ec;border-color:var(--accent);color:#8b2a10}
+.quiz-feedback{margin-top:.75rem;font-size:.85rem;padding:.75rem 1rem;border-radius:6px;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:#eef8f1;color:#1f6b3a;border:1px solid #a0d8b0}
+.quiz-feedback.err{background:#fff0ec;color:#8b2a10;border:1px solid #f0c0a0}
+.quiz-reset{margin-top:.75rem;font-family:'IBM Plex Mono',monospace;font-size:11px;background:none;border:1px solid var(--border);padding:5px 14px;border-radius:4px;cursor:pointer;color:var(--muted);transition:border-color .2s,color .2s}
+.quiz-reset:hover{border-color:var(--border2);color:var(--ink)}
+
+footer{background:var(--ink);padding:2rem;text-align:center}
+.footer-text{font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.3);letter-spacing:.04em}
+.footer-text span{color:rgba(255,255,255,.6)}
+
+@media(max-width:620px){
+.intro-grid{grid-template-columns:1fr}
+.compare-grid{grid-template-columns:1fr}
+.recap-grid{grid-template-columns:1fr 1fr}
+.hero h1{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="cv-nav">
+    <div class="nav-inner">
+        <span class="nav-brand"><span>//</span> malachi-matei.cv</span>
+        <div class="nav-links">
+            <a href="polimorfism-static-cs.html">Polimorfism</a>
+            <a href="practica-probleme.html">Probleme Practică</a>
+            <a href="asumarea-raspunderii.html">Asumare responsabilitate</a>
+            <a href="index.html">Curriculum Vitae</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+<div class="hero-inner">
+<div class="hero-pill">C# · OOP · POLIMORFISM</div>
+<h1>Polimorfism <em>Static</em><br>în C#</h1>
+<p class="hero-desc">O explorare aprofundată a polimorfismului static — cum funcționează, de ce există și cum îl aplici în practică, explicat din mai multe unghiuri.</p>
+<div class="hero-meta">
+<span class="meta-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>~15 min lectură</span>
+<span class="meta-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>4 secțiuni</span>
+<span class="meta-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>Exemple cod C#</span>
+</div>
+</div>
+</div>
+
+<div class="page-tabs">
+<div class="tabs-inner">
+<button class="tab active" data-page="p1">1 · Ce este</button>
+<button class="tab" data-page="p2">2 · Supraîncărcare</button>
+<button class="tab" data-page="p3">3 · Parametri generici</button>
+<button class="tab" data-page="p4">4 · vs Dinamic · Quiz</button>
+</div>
+</div>
+
+<div id="p1" class="page active">
+<h2 class="sec">Ce este polimorfismul static?</h2>
+<p class="sec-lead">Polimorfismul este unul dintre pilonii fundamentali ai programării orientate obiect. Există două forme principale — statică și dinamică. Să înțelegem mai întâi ce înseamnă forma statică.</p>
+
+<div class="intro-grid">
+<div class="info-box accent-left">
+<div class="box-label">Definiție simplă</div>
+<div class="box-title">Rezolvat la compilare</div>
+<p class="box-text">Polimorfismul static înseamnă că decizia despre <em>care versiune a unei metode</em> se apelează se ia la momentul compilării, nu la rulare. Compilatorul știe dinainte ce cod va executa.</p>
+</div>
+<div class="info-box accent-left2">
+<div class="box-label">Denumire tehnică</div>
+<div class="box-title">Early Binding</div>
+<p class="box-text">Se mai numește <em>legare timpurie</em> (early binding). Spre deosebire de polimorfismul dinamic (late binding), nu există niciun cost de căutare la runtime — totul este rezolvat de compilator.</p>
+</div>
+</div>
+
+<h3 class="sub"><span class="num">1</span> Analogia cu aparatul de cafea</h3>
+<div class="analogy-card">
+<div class="analogy-icon">☕</div>
+<div class="analogy-content">
+<div class="analogy-title">Butoane diferite, aceeași acțiune conceptuală</div>
+<p class="analogy-text">Imaginează-ți un aparat de cafea cu trei butoane: <em>espresso</em>, <em>cappuccino</em>, <em>americano</em>. Toate "fac cafea" — aceeași idee generală — dar fiecare buton declanșează un proces diferit. Când apeși butonul, aparatul <strong>știe dinainte</strong> (la "compilare") ce va face. Nu decide în momentul apăsării care metodă să ruleze; este prestabilit prin design. Acesta este polimorfismul static.</p>
+</div>
+</div>
+
+<div class="analogy-card">
+<div class="analogy-icon">🔧</div>
+<div class="analogy-content">
+<div class="analogy-title">Trusa de scule cu capete interschimbabile</div>
+<p class="analogy-text">Un mecanic are o singură cheie, dar capete diferite — pentru șuruburi de 10mm, 12mm, 14mm. Funcția este aceeași conceptual (<em>strânge șurub</em>), dar parametrul (dimensiunea) determină ce cap folosești. Compilatorul vede ce dimensiune ai și "alege" capul potrivit înainte să înceapă treaba. Nu există nicio decizie la momentul execuției.</p>
+</div>
+</div>
+
+<h3 class="sub"><span class="num">2</span> Formele polimorfismului static în C#</h3>
+<div class="timeline">
+<div class="tl-item">
+<div class="tl-dot r">1</div>
+<div class="tl-content">
+<div class="tl-title">Supraîncărcarea metodelor (Method Overloading)</div>
+<p class="tl-text">Mai multe metode cu același nume, dar cu semnături diferite (parametri diferiți). Compilatorul alege metoda potrivită în funcție de tipul și numărul argumentelor.</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-dot b">2</div>
+<div class="tl-content">
+<div class="tl-title">Supraîncărcarea operatorilor (Operator Overloading)</div>
+<p class="tl-text">Redefinirea comportamentului operatorilor (+, -, *, etc.) pentru tipuri de date personalizate. Compilatorul traduce expresia <code>a + b</code> în apelul metodei <code>op_Addition(a, b)</code>.</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-dot g">3</div>
+<div class="tl-content">
+<div class="tl-title">Generice / Parametri de tip (Generics)</div>
+<p class="tl-text">Clase și metode parametrizate cu tipuri. <code>List&lt;int&gt;</code> vs <code>List&lt;string&gt;</code> — compilatorul generează cod specific pentru fiecare tip, evitând boxing și asigurând siguranță la compilare.</p>
+</div>
+</div>
+</div>
+
+<div class="explain-box">
+<div class="explain-head">💡 DE REȚINUT</div>
+<p>Polimorfismul static nu înlocuiește polimorfismul dinamic — le servesc scopuri diferite. Cel static oferă performanță maximă și siguranță la compilare. Cel dinamic oferă flexibilitate la runtime. Un programator bun știe când să folosească fiecare.</p>
+</div>
+</div>
+
+<div id="p2" class="page">
+<h2 class="sec">Supraîncărcarea metodelor</h2>
+<p class="sec-lead">Method overloading este cea mai comună formă de polimorfism static. Permite definirea mai multor versiuni ale aceleiași metode, diferențiate prin semnătura lor.</p>
+
+<h3 class="sub"><span class="num">1</span> Exemplu de bază</h3>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Calculator.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="k">public class</span> <span class="t">Calculator</span>
+{
+    <span class="c">// Versiunea pentru int</span>
+    <span class="k">public int</span> <span class="n">Aduna</span>(<span class="k">int</span> a, <span class="k">int</span> b)
+    {
+        <span class="k">return</span> a + b;
+    }
+
+    <span class="c">// Versiunea pentru double</span>
+    <span class="k">public double</span> <span class="n">Aduna</span>(<span class="k">double</span> a, <span class="k">double</span> b)
+    {
+        <span class="k">return</span> a + b;
+    }
+
+    <span class="c">// Versiunea cu trei parametri</span>
+    <span class="k">public int</span> <span class="n">Aduna</span>(<span class="k">int</span> a, <span class="k">int</span> b, <span class="k">int</span> c)
+    {
+        <span class="k">return</span> a + b + c;
+    }
+
+    <span class="c">// Versiunea pentru string (concatenare)</span>
+    <span class="k">public string</span> <span class="n">Aduna</span>(<span class="k">string</span> a, <span class="k">string</span> b)
+    {
+        <span class="k">return</span> a + b;
+    }
+}</pre>
+</div>
+
+<div class="explain-box blue">
+<div class="explain-head">🔍 CE FACE COMPILATORUL</div>
+<p>Când scrii <code>calc.Aduna(3, 4)</code>, compilatorul vede că ambele argumente sunt <code>int</code> și alege prima supraîncărcare. Când scrii <code>calc.Aduna(3.14, 2.71)</code>, alege a doua. Această decizie este finală la compilare — la runtime nu există nicio verificare sau decizie suplimentară.</p>
+</div>
+
+<h3 class="sub"><span class="num">2</span> Supraîncărcarea operatorilor</h3>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Punct2D.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="k">public class</span> <span class="t">Punct2D</span>
+{
+    <span class="k">public double</span> X { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public double</span> Y { <span class="k">get</span>; <span class="k">set</span>; }
+
+    <span class="k">public</span> <span class="t">Punct2D</span>(<span class="k">double</span> x, <span class="k">double</span> y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    <span class="c">// Supraîncărcăm operatorul +</span>
+    <span class="k">public static</span> <span class="t">Punct2D</span> <span class="k">operator</span> +(<span class="t">Punct2D</span> a, <span class="t">Punct2D</span> b)
+    {
+        <span class="k">return new</span> <span class="t">Punct2D</span>(a.X + b.X, a.Y + b.Y);
+    }
+
+    <span class="c">// Supraîncărcăm operatorul ==</span>
+    <span class="k">public static bool operator</span> ==(<span class="t">Punct2D</span> a, <span class="t">Punct2D</span> b)
+    {
+        <span class="k">return</span> a.X == b.X &amp;&amp; a.Y == b.Y;
+    }
+
+    <span class="k">public static bool operator</span> !=(<span class="t">Punct2D</span> a, <span class="t">Punct2D</span> b)
+    {
+        <span class="k">return</span> !(a == b);
+    }
+
+    <span class="k">public override string</span> <span class="n">ToString</span>()
+    {
+        <span class="k">return</span> <span class="s">$"({X}, {Y})"</span>;
+    }
+}
+
+<span class="c">// Utilizare</span>
+<span class="t">Punct2D</span> p1 = <span class="k">new</span> <span class="t">Punct2D</span>(<span class="m">2</span>, <span class="m">3</span>);
+<span class="t">Punct2D</span> p2 = <span class="k">new</span> <span class="t">Punct2D</span>(<span class="m">4</span>, <span class="m">1</span>);
+<span class="t">Punct2D</span> p3 = p1 + p2;          <span class="c">// → (6, 4)</span>
+<span class="k">bool</span> egal = (p1 == p2);        <span class="c">// → false</span></pre>
+</div>
+
+<div class="explain-box green">
+<div class="explain-head">✅ DE CE ESTE UTIL</div>
+<p>Fără supraîncărcarea operatorului, ar trebui să scrii <code>Punct2D p3 = Punct2D.Aduna(p1, p2)</code>. Cu supraîncărcare, codul devine natural și lizibil: <code>p3 = p1 + p2</code>. Compilatorul transformă automat operatorul <code>+</code> în apelul metodei statice corespunzătoare.</p>
+</div>
+
+<h3 class="sub"><span class="num">3</span> Reguli importante</h3>
+<div class="explain-box">
+<div class="explain-head">⚠️ CE NU SE POATE</div>
+<p>Două metode NU pot forma supraîncărcare validă dacă diferă <strong>doar prin tipul de return</strong>. De exemplu, <code>int Calcul(int x)</code> și <code>double Calcul(int x)</code> vor provoca eroare de compilare — compilatorul nu poate distinge între ele după semnătură.</p>
+</div>
+</div>
+
+<div id="p3" class="page">
+<h2 class="sec">Generice — polimorfism static avansat</h2>
+<p class="sec-lead">Genericele (Generics) în C# reprezintă o formă sofisticată de polimorfism static. Ele permit scrierea de cod reutilizabil care funcționează cu orice tip, cu toate verificările făcute la compilare.</p>
+
+<h3 class="sub"><span class="num">1</span> Problema fără generice</h3>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">FaraGenerice.cs — Problema</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// Varianta proastă — fără generice</span>
+<span class="k">public class</span> <span class="t">CutieInt</span>
+{
+    <span class="k">private int</span> _valoare;
+    <span class="k">public void</span> <span class="n">Pune</span>(<span class="k">int</span> val) { _valoare = val; }
+    <span class="k">public int</span> <span class="n">Ia</span>() { <span class="k">return</span> _valoare; }
+}
+
+<span class="k">public class</span> <span class="t">CutieString</span>
+{
+    <span class="k">private string</span> _valoare;
+    <span class="k">public void</span> <span class="n">Pune</span>(<span class="k">string</span> val) { _valoare = val; }
+    <span class="k">public string</span> <span class="n">Ia</span>() { <span class="k">return</span> _valoare; }
+}
+<span class="c">// Ar trebui să repetăm pentru fiecare tip... nepractic!</span></pre>
+</div>
+
+<h3 class="sub"><span class="num n2">2</span> Soluția cu generice</h3>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Cutie.cs — Soluția cu generice</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// O singură clasă generică</span>
+<span class="k">public class</span> <span class="t">Cutie</span>&lt;<span class="t">T</span>&gt;
+{
+    <span class="k">private</span> <span class="t">T</span> _valoare;
+
+    <span class="k">public void</span> <span class="n">Pune</span>(<span class="t">T</span> val)
+    {
+        _valoare = val;
+    }
+
+    <span class="k">public</span> <span class="t">T</span> <span class="n">Ia</span>()
+    {
+        <span class="k">return</span> _valoare;
+    }
+}
+
+<span class="c">// Utilizare — compilatorul generează cod specific</span>
+<span class="t">Cutie</span>&lt;<span class="k">int</span>&gt; cutieInt = <span class="k">new</span> <span class="t">Cutie</span>&lt;<span class="k">int</span>&gt;();
+cutieInt.<span class="n">Pune</span>(<span class="m">42</span>);
+<span class="k">int</span> val = cutieInt.<span class="n">Ia</span>(); <span class="c">// Tipul este verificat la compilare!</span>
+
+<span class="t">Cutie</span>&lt;<span class="k">string</span>&gt; cutieStr = <span class="k">new</span> <span class="t">Cutie</span>&lt;<span class="k">string</span>&gt;();
+cutieStr.<span class="n">Pune</span>(<span class="s">"Salut"</span>);
+<span class="k">string</span> text = cutieStr.<span class="n">Ia</span>(); <span class="c">// Funcționează perfect</span></pre>
+</div>
+
+<h3 class="sub"><span class="num n3">3</span> Metode generice și constrângeri</h3>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Utilitare.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="k">public class</span> <span class="t">Utilitare</span>
+{
+    <span class="c">// Metodă generică simplă</span>
+    <span class="k">public static void</span> <span class="n">Afiseaza</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> element)
+    {
+        <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"Valoare: {element}"</span>);
+    }
+
+    <span class="c">// Cu constrângere — T trebuie să implementeze IComparable</span>
+    <span class="k">public static</span> <span class="t">T</span> <span class="n">Maxim</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> a, <span class="t">T</span> b) <span class="k">where</span> <span class="t">T</span> : <span class="t">IComparable</span>&lt;<span class="t">T</span>&gt;
+    {
+        <span class="k">return</span> a.<span class="n">CompareTo</span>(b) &gt; <span class="m">0</span> ? a : b;
+    }
+
+    <span class="c">// Cu constrângere — T trebuie să fie clasă cu constructor fără parametri</span>
+    <span class="k">public static</span> <span class="t">T</span> <span class="n">CreeazaNou</span>&lt;<span class="t">T</span>&gt;() <span class="k">where</span> <span class="t">T</span> : <span class="k">class</span>, <span class="k">new</span>()
+    {
+        <span class="k">return new</span> <span class="t">T</span>();
+    }
+}
+
+<span class="c">// Utilizare</span>
+<span class="t">Utilitare</span>.<span class="n">Afiseaza</span>(<span class="m">42</span>);          <span class="c">// T = int</span>
+<span class="t">Utilitare</span>.<span class="n">Afiseaza</span>(<span class="s">"Matei"</span>);    <span class="c">// T = string</span>
+
+<span class="k">int</span> mare = <span class="t">Utilitare</span>.<span class="n">Maxim</span>(<span class="m">10</span>, <span class="m">25</span>);        <span class="c">// → 25</span>
+<span class="k">string</span> ultim = <span class="t">Utilitare</span>.<span class="n">Maxim</span>(<span class="s">"ana"</span>, <span class="s">"zoe"</span>); <span class="c">// → "zoe"</span></pre>
+</div>
+
+<div class="explain-box">
+<div class="explain-head">💡 DE CE ESTE POLIMORFISM STATIC</div>
+<p>Când compilatorul vede <code>Maxim&lt;int&gt;(10, 25)</code>, el generează o versiune specifică a metodei pentru tipul <code>int</code>. Când vede <code>Maxim&lt;string&gt;</code>, generează alta. Fiecare versiune este specifică tipului și complet verificată — niciun risc de eroare la runtime din cauza tipurilor incompatibile.</p>
+</div>
+</div>
+
+<div id="p4" class="page">
+<h2 class="sec">Static vs Dinamic — comparație</h2>
+<p class="sec-lead">Polimorfismul static și cel dinamic nu sunt în competiție — se completează. Înțelegerea diferențelor te ajută să alegi instrumentul potrivit pentru fiecare situație.</p>
+
+<div class="compare-grid">
+<div class="compare-card static">
+<div class="compare-title">POLIMORFISM STATIC</div>
+<ul class="compare-list">
+<li>Rezolvat la momentul compilării</li>
+<li>Bazat pe supraîncărcare și generice</li>
+<li>Performanță maximă — fără overhead</li>
+<li>Siguranță completă la compilare</li>
+<li>Nu necesită <code>virtual</code> / <code>override</code></li>
+<li>Tipul obiectului nu contează la runtime</li>
+</ul>
+</div>
+<div class="compare-card dynamic">
+<div class="compare-title">POLIMORFISM DINAMIC</div>
+<ul class="compare-list">
+<li>Rezolvat la momentul execuției</li>
+<li>Bazat pe moștenire și metode virtuale</li>
+<li>Mic overhead din vtable lookup</li>
+<li>Flexibilitate — noi tipuri fără recompilare</li>
+<li>Necesită <code>virtual</code>, <code>override</code>, <code>abstract</code></li>
+<li>Tipul real al obiectului decide metoda</li>
+</ul>
+</div>
+</div>
+
+<h3 class="sub"><span class="num">1</span> Exemplu comparativ complet</h3>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Comparatie.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// ─── STATIC: supraîncărcare ───────────────────────────────</span>
+<span class="k">public class</span> <span class="t">AfisatorStatic</span>
+{
+    <span class="k">public void</span> <span class="n">Afiseaza</span>(<span class="k">int</span> val)
+        =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"Int: {val}"</span>);
+
+    <span class="k">public void</span> <span class="n">Afiseaza</span>(<span class="k">string</span> val)
+        =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"String: {val}"</span>);
+}
+<span class="c">// Compilatorul decide imediat. Fără surprize la runtime.</span>
+
+
+<span class="c">// ─── DINAMIC: metode virtuale ─────────────────────────────</span>
+<span class="k">public abstract class</span> <span class="t">Animal</span>
+{
+    <span class="k">public abstract void</span> <span class="n">Sunet</span>();  <span class="c">// obligatoriu de implementat</span>
+}
+
+<span class="k">public class</span> <span class="t">Caine</span> : <span class="t">Animal</span>
+{
+    <span class="k">public override void</span> <span class="n">Sunet</span>()
+        =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"Ham!"</span>);
+}
+
+<span class="k">public class</span> <span class="t">Pisica</span> : <span class="t">Animal</span>
+{
+    <span class="k">public override void</span> <span class="n">Sunet</span>()
+        =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"Miau!"</span>);
+}
+
+<span class="c">// La runtime, C# vede că obiectul este Caine și apelează Ham!</span>
+<span class="t">Animal</span> a = <span class="k">new</span> <span class="t">Caine</span>();
+a.<span class="n">Sunet</span>(); <span class="c">// → Ham!  (decizie la RUNTIME)</span></pre>
+</div>
+
+<h3 class="sub"><span class="num n2">2</span> Când să folosești fiecare</h3>
+
+<div class="explain-box blue">
+<div class="explain-head">✅ FOLOSEȘTE POLIMORFISM STATIC când...</div>
+<p>Ai aceeași operație conceptuală dar cu tipuri de date diferite (ex: calcule numerice, conversii). Prioritatea este performanța. Vrei că compilatorul să prindă orice greșeală de tip înainte de rulare. Lucrezi cu structuri de date generice (colecții, depozite, utilitare).</p>
+</div>
+
+<div class="explain-box green">
+<div class="explain-head">✅ FOLOSEȘTE POLIMORFISM DINAMIC când...</div>
+<p>Ai o familie de tipuri cu comportament diferit (animale, forme geometrice, angajați). Vrei să adaugi tipuri noi fără să modifici codul existent (principiul Open/Closed). Lucrezi cu liste de obiecte de tipuri diferite dar înrudite. Implementezi design patterns (Strategy, Observer, Factory).</p>
+</div>
+
+<div class="recap-grid">
+<div class="recap-card"><div class="rc-num rc-red">2</div><div class="rc-label">mecanisme principale: overloading + generice</div></div>
+<div class="recap-card"><div class="rc-num rc-blue">0</div><div class="rc-label">overhead la runtime față de cod direct</div></div>
+<div class="recap-card"><div class="rc-num rc-green">100%</div><div class="rc-label">erori de tip prinse la compilare</div></div>
+</div>
+
+<h3 class="sub"><span class="num n3">3</span> Mini quiz — testează-ți cunoștințele</h3>
+
+<div class="quiz-wrap" id="q1">
+<p class="quiz-q">1. Care formă de polimorfism este rezolvată la momentul compilării?</p>
+<div class="quiz-opts">
+<button class="quiz-opt" data-correct="false">Polimorfismul dinamic</button>
+<button class="quiz-opt" data-correct="true">Polimorfismul static</button>
+<button class="quiz-opt" data-correct="false">Ambele forme</button>
+</div>
+<div class="quiz-feedback"></div>
+<button class="quiz-reset">Resetează</button>
+</div>
+
+<div class="quiz-wrap" id="q2">
+<p class="quiz-q">2. Ce tip de polimorfism static folosește cuvântul cheie <code>virtual</code>?</p>
+<div class="quiz-opts">
+<button class="quiz-opt" data-correct="false">Supraîncărcarea metodelor</button>
+<button class="quiz-opt" data-correct="false">Genericele</button>
+<button class="quiz-opt" data-correct="true">Niciuna — <code>virtual</code> aparține polimorfismului dinamic</button>
+</div>
+<div class="quiz-feedback"></div>
+<button class="quiz-reset">Resetează</button>
+</div>
+
+<div class="quiz-wrap" id="q3">
+<p class="quiz-q">3. Care dintre cele de mai jos este o formă validă de supraîncărcare?</p>
+<div class="quiz-opts">
+<button class="quiz-opt" data-correct="false"><code>int Calc(int x)</code> și <code>double Calc(int x)</code></button>
+<button class="quiz-opt" data-correct="true"><code>int Calc(int x)</code> și <code>int Calc(int x, int y)</code></button>
+<button class="quiz-opt" data-correct="false"><code>int Calc(int x)</code> și <code>int Calc(int z)</code></button>
+</div>
+<div class="quiz-feedback"></div>
+<button class="quiz-reset">Resetează</button>
+</div>
+
+<div style="height:2rem"></div>
+</div>
+
+<footer>
+<p class="footer-text">Malachi Matei · <span>Grupa DW2412</span> </p>
+</footer>
+
+<script>
+const tabs=document.querySelectorAll('.tab');
+const pages=document.querySelectorAll('.page');
+tabs.forEach(tab=>{
+tab.addEventListener('click',()=>{
+tabs.forEach(t=>t.classList.remove('active'));
+pages.forEach(p=>p.classList.remove('active'));
+tab.classList.add('active');
+document.getElementById(tab.dataset.page).classList.add('active');
+window.scrollTo({top:document.querySelector('.page-tabs').offsetTop-10,behavior:'smooth'});
+});
+});
+
+const quizMsgs={
+true:['Corect! Ai înțeles conceptul.','Excelent! Răspuns corect.','Perfect! Continuă tot așa.'],
+false:['Greșit. Mai gândește-te.','Incorect. Recitește secțiunea.','Nu tocmai. Încearcă din nou.']
+};
+
+document.querySelectorAll('.quiz-wrap').forEach(wrap=>{
+const opts=wrap.querySelectorAll('.quiz-opt');
+const fb=wrap.querySelector('.quiz-feedback');
+const reset=wrap.querySelector('.quiz-reset');
+let answered=false;
+
+opts.forEach(opt=>{
+opt.addEventListener('click',()=>{
+if(answered)return;
+answered=true;
+const correct=opt.dataset.correct==='true';
+opt.classList.add(correct?'correct':'wrong');
+if(!correct){
+opts.forEach(o=>{if(o.dataset.correct==='true')o.classList.add('correct')});
+}
+const msgs=quizMsgs[correct.toString()];
+fb.textContent=msgs[Math.floor(Math.random()*msgs.length)];
+fb.className='quiz-feedback show '+(correct?'ok':'err');
+});
+});
+
+reset.addEventListener('click',()=>{
+answered=false;
+opts.forEach(o=>{o.classList.remove('correct','wrong')});
+fb.className='quiz-feedback';
+fb.textContent='';
+});
+});
+</script>
+</body>
+</html>

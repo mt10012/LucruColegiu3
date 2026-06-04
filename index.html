@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV — Malachi Matei</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0d0f14;
+--surface:#13161e;
+--card:#1a1d28;
+--border:#2a2d3a;
+--accent:#5b8dee;
+--accent2:#a78bfa;
+--accent3:#34d399;
+--text:#e8eaf0;
+--muted:#8b8fa8;
+--tag-bg:#1e2236;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-weight:300;line-height:1.6;min-height:100vh;overflow-x:hidden}
+
+.noise{position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:.3;z-index:0}
+
+.glow{position:fixed;top:-20%;left:60%;width:600px;height:600px;background:radial-gradient(circle,rgba(91,141,238,.08) 0%,transparent 70%);z-index:0;pointer-events:none}
+.glow2{position:fixed;bottom:-10%;left:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%);z-index:0;pointer-events:none}
+
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);background:rgba(13,15,20,.85);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:.05em}
+.nav-brand span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;letter-spacing:.04em}
+.nav-links a:hover{color:var(--text)}
+
+main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 2rem 6rem}
+
+header{padding:6rem 0 4rem;display:grid;grid-template-columns:1fr auto;align-items:start;gap:3rem;border-bottom:1px solid var(--border)}
+.header-left{}
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);background:rgba(91,141,238,.12);border:1px solid rgba(91,141,238,.25);padding:4px 12px;border-radius:4px;letter-spacing:.08em;margin-bottom:1.5rem}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(2.8rem,5vw,4.2rem);line-height:1.1;font-weight:400;margin-bottom:.5rem}
+h1 span{font-style:italic;color:var(--accent2)}
+.subtitle{font-size:1.05rem;color:var(--muted);margin-bottom:1.5rem;font-weight:300}
+.contacts{display:flex;flex-wrap:wrap;gap:.75rem}
+.contact-pill{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:6px 14px;border-radius:100px;transition:border-color .2s,color .2s;text-decoration:none}
+.contact-pill:hover{border-color:var(--accent);color:var(--text)}
+.contact-pill svg{width:13px;height:13px;opacity:.7}
+.header-avatar{width:140px;height:140px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.avatar-inner{font-family:'DM Serif Display',serif;font-size:3.5rem;color:var(--accent2);font-style:italic}
+
+section{padding:3.5rem 0;border-bottom:1px solid var(--border)}
+section:last-child{border-bottom:none}
+.section-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2rem;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.about-text{font-size:1.05rem;color:var(--text);line-height:1.8;max-width:680px;font-weight:300}
+.about-text strong{color:var(--accent2);font-weight:500}
+
+.edu-grid,.exp-grid{display:flex;flex-direction:column;gap:1.25rem}
+.edu-card,.exp-card,.proj-card,.skill-section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;transition:border-color .25s,transform .2s}
+.edu-card:hover,.exp-card:hover,.proj-card:hover{border-color:rgba(91,141,238,.4);transform:translateY(-2px)}
+
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.5rem}
+.card-title{font-size:1rem;font-weight:500;color:var(--text)}
+.card-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent3);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);padding:3px 10px;border-radius:4px;white-space:nowrap}
+.card-sub{font-size:.875rem;color:var(--accent);margin-bottom:.75rem;font-weight:400}
+.card-desc{font-size:.875rem;color:var(--muted);line-height:1.7}
+
+ul.card-list{list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-top:.75rem}
+ul.card-list li{font-size:.875rem;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6}
+ul.card-list li::before{content:'›';position:absolute;left:0;color:var(--accent);font-weight:600}
+
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
+.proj-card{display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.proj-icon{width:36px;height:36px;border-radius:8px;background:rgba(91,141,238,.12);border:1px solid rgba(91,141,238,.2);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.proj-icon svg{width:18px;height:18px;color:var(--accent)}
+.proj-title{font-size:.95rem;font-weight:500;margin-bottom:.4rem}
+.proj-desc{font-size:.825rem;color:var(--muted);line-height:1.6;flex:1;margin-bottom:1rem}
+.proj-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.proj-icon{transition:transform .18s}
+.proj-card:hover .proj-icon{transform:scale(1.05)}
+
+.proj-cta{display:inline-flex;align-items:center;gap:.5rem;margin-top:.75rem;background:transparent;border:1px solid var(--border);color:var(--muted);padding:7px 10px;border-radius:8px;text-decoration:none;width:max-content;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s,background .18s,border-color .18s,color .18s}
+.proj-card:hover .proj-cta{opacity:1;transform:none;border-color:rgba(91,141,238,.4);background:rgba(91,141,238,.04);color:var(--text)}
+.proj-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(91,141,238,.06)}
+.tag-sm{font-family:'DM Mono',monospace;font-size:10px;background:var(--tag-bg);border:1px solid var(--border);color:var(--muted);padding:3px 8px;border-radius:4px;letter-spacing:.04em}
+.edu-cta{display:inline-flex;align-items:center;gap:.5rem;margin-top:.85rem;background:transparent;border:1px dashed var(--border);color:var(--muted);padding:6px 10px;border-radius:8px;text-decoration:none;width:max-content;font-family:'DM Mono',monospace;font-size:13px}
+.edu-cta:hover{border-color:rgba(91,141,238,.4);color:var(--text);background:rgba(91,141,238,.03)}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.skill-section{padding:1.25rem}
+.skill-cat{font-size:.8rem;color:var(--accent2);font-weight:500;margin-bottom:.75rem;letter-spacing:.04em}
+.skill-items{display:flex;flex-direction:column;gap:.4rem}
+.skill-item{display:flex;align-items:center;justify-content:space-between;font-size:.825rem;color:var(--muted)}
+.skill-bar{width:80px;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.skill-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+.langs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+.lang-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-align:center;transition:border-color .25s}
+.lang-card:hover{border-color:rgba(167,139,250,.4)}
+.lang-name{font-size:1.1rem;font-weight:500;margin-bottom:.25rem}
+.lang-level{font-size:.8rem;color:var(--accent3);font-family:'DM Mono',monospace}
+
+.footer-note{text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);padding-top:3rem;letter-spacing:.04em}
+.footer-note span{color:var(--accent2)}
+
+.animate{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.animate.visible{opacity:1;transform:none}
+
+@media(max-width:600px){
+header{grid-template-columns:1fr}
+.header-avatar{display:none}
+.proj-grid{grid-template-columns:1fr}
+.skills-grid{grid-template-columns:1fr 1fr}
+.langs-grid{grid-template-columns:1fr 1fr}
+.card-header{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="grid-bg"></div>
+<div class="glow"></div>
+<div class="glow2"></div>
+
+<nav>
+<div class="nav-inner">
+<span class="nav-brand"><span>//</span> malachi-matei.cv</span>
+		<div class="nav-links">
+			<a href="polimorfism-static-cs.html">Polimorfism</a>
+			<a href="practica-probleme.html">Probleme Practică</a>
+			<a href="asumarea-raspunderii.html">Asumare responsabilitate</a>
+			<a href="index.html">Curriculum Vitae</a>
+</div>
+</div>
+</nav>
+
+<main>
+<header class="animate">
+<div class="header-left">
+<div class="tag">CURRICULUM VITAE · 2026</div>
+<h1>Malachi <span>Matei</span></h1>
+<p class="subtitle">Elev · Grupa DW2412 · Dezvoltare Web & Software</p>
+<div class="contacts">
+<a href="mailto:malachimatei52@gmail.com" class="contact-pill">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+malachimatei52@gmail.com
+</a>
+<span class="contact-pill">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+Chișinău, MD
+</span>
+<span class="contact-pill">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+CEEF Grupa DW2412 Specializare Dezvoltare Web
+</span>
+</div>
+</div>
+<div class="header-avatar"><span class="avatar-inner">MM</span></div>
+</header>
+
+<section id="despre" class="animate">
+<div class="section-label">despre mine</div>
+<p class="about-text">
+Sunt Malachi Matei, elev în grupa <strong>DW2412</strong>, cu interes aprofundat pentru
+<strong>dezvoltarea web</strong> și programarea orientată obiect în <strong>C#</strong>.
+Pe parcursul stagiului de practică am aplicat cunoștințele acumulate în construirea de
+interfețe web funcționale, lucrul cu baze de date și înțelegerea principiilor fundamentale
+ale programării moderne. Prefer un stil de lucru ordonat, cu cod curat și soluții
+bine structurate.
+</p>
+</section>
+
+<section id="educatie" class="animate">
+<div class="section-label">educație</div>
+<div class="edu-grid">
+<div class="edu-card">
+<div class="card-header">
+<span class="card-title">CEEF — DW2412</span>
+<span class="card-date">2024 – prezent</span>
+</div>
+<div class="card-sub">Grupa DW2412 · Specializare: Dezvoltare Web</div>
+<p class="card-desc">Programe de studiu: HTML/CSS, JavaScript, C#, baze de date SQL, sisteme de operare Linux și principii de rețelistică. Implicare activă în proiecte de laborator și lucrări practice evaluate de profesori coordonatori.</p>
+	<a class="edu-cta" href="https://www.ceef.md" target="_blank" rel="noopener noreferrer">CEEF</a>
+</div>
+<div class="edu-card">
+<div class="card-header">
+<span class="card-title">Cursuri și resurse complementare</span>
+<span class="card-date">2024 – prezent</span>
+</div>
+<div class="card-sub">Autoinstruire · Platforme online</div>
+<p class="card-desc">Studiu individual prin documentație oficială Microsoft, tutoriale MDN Web Docs și exerciții practice pe platforme de coding. Focus pe CSS avansat, animații pure și arhitecturi OOP, parcurgerea cursurilor Certiport cu python și DB și Networking.</p>
+</div>
+</div>
+</section>
+
+<section id="practica" class="animate">
+<div class="section-label">stagiu de practică</div>
+<div class="exp-grid">
+<div class="exp-card">
+<div class="card-header">
+<span class="card-title">Stagiu de practică — C++/HTML/CSS</span>
+<span class="card-date">2025</span>
+</div>
+<div class="card-sub">CEEF · Chișinău, MD </div>
+<p class="card-desc">Pe durata stagiului am participat la proiecte reale de web development, lucrând cu echipe de dezvoltatori și aplicând tehnici moderne de construire a interfețelor.</p>
+<ul class="card-list">
+<li>Proiectare și implementare pagini HTML/CSS pentru un site corporativ multi-pagină cu temă dark navy/blue-purple</li>
+<li>Creare animații CSS pure (<code>@keyframes</code>) fără dependențe JavaScript</li>
+<li>Construire dashboard cu 16 panouri overlay CSS-only folosind pseudo-clasa <code>:target</code></li>
+<li>Studiu și aplicare practică a principiilor programării modulare în C++</li>
+</ul>
+</div>
+<div class="exp-card">
+<div class="card-header">
+<span class="card-title">Proiecte de laborator</span>
+<span class="card-date">2026</span>
+</div>
+<div class="card-sub">Activitate Individuală</div>
+<ul class="card-list">
+<li>Lab 5: clase <code>Carte</code>/<code>Utilizator</code>, operații I/O pe fișiere, expresii lambda</li>
+<li>Lab 6: ierarhie de moștenire — <code>Triunghi</code>, <code>Paralelogram</code>, <code>Prisma</code>, <code>Piramida</code>, <code>Sofer</code></li>
+<li>Lab 8: sistem evidență angajați cu ierarhia <code>Angajat</code>, interfețe și formule salariale</li>
+<li>Diagrame UML sistem bancar cu agregare, compoziție, dependență și moștenire în draw.io</li>
+<li>Proiecte web cu HTML/CSS și JavaScript</li>
+<li>Proiecte Java cu implementări OOP</li>
+<li>Proiecte Python </li>
+<li>Proiecte C++ Freelance</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section id="proiecte" class="animate">
+<div class="section-label">proiecte realizate</div>
+<div class="proj-grid">
+<div class="proj-card">
+<div class="proj-icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+</div>
+<div class="proj-title">Axiom IT — Website Corporativ</div>
+<p class="proj-desc">Site multi-pagină pentru companie IT fictivă: homepage, despre, servicii, blog, dashboard. CSS pur, animații @keyframes, fără JavaScript.</p>
+				<div class="proj-tags">
+				<span class="tag-sm">HTML5</span><span class="tag-sm">CSS3</span><span class="tag-sm">:target CSS</span><span class="tag-sm">@keyframes</span>
+				</div>
+				<a class="proj-cta" href="https://github.com/mt10012/Studiu-individual-26-web" target="_blank" rel="noopener noreferrer">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 .5C5.73.5.5 5.73.5 12.02c0 5.1 3.29 9.42 7.86 10.95.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.37-3.88-1.37-.53-1.35-1.3-1.71-1.3-1.71-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.76.41-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.03 11.03 0 012.9-.39c.98 0 1.97.13 2.9.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.28 5.67.42.36.79 1.07.79 2.16 0 1.56-.01 2.82-.01 3.2 0 .31.21.68.8.56A11.53 11.53 0 0023.5 12.02C23.5 5.73 18.27.5 12 .5z"/></svg>
+					Vezi pe GitHub
+				</a>
+				</div>
+<div class="proj-card">
+<div class="proj-icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+</div>
+<div class="proj-title">Site cu design inovativ pur HTML</div>
+<p class="proj-desc">Proiect la inforatică stie strict html</p>
+				<div class="proj-tags">
+				<span class="tag-sm">HTML5</span><span class="tag-sm">Web5<span class="tag-sm">GIT</span><span class="tag-sm">NEW</span>
+				</div>
+				<a class="proj-cta" href="https://github.com/mt10012/Informatica" target="_blank" rel="noopener noreferrer">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 .5C5.73.5.5 5.73.5 12.02c0 5.1 3.29 9.42 7.86 10.95.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.37-3.88-1.37-.53-1.35-1.3-1.71-1.3-1.71-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.76.41-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.03 11.03 0 012.9-.39c.98 0 1.97.13 2.9.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.28 5.67.42.36.79 1.07.79 2.16 0 1.56-.01 2.82-.01 3.2 0 .31.21.68.8.56A11.53 11.53 0 0023.5 12.02C23.5 5.73 18.27.5 12 .5z"/></svg>
+					Vezi pe GitHub
+				</a>
+				</div>
+<div class="proj-card">
+<div class="proj-icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+</div>
+<div class="proj-title">Sistem evidență angajați C#</div>
+<p class="proj-desc">Aplicație consolă cu ierarhie OOP completă, interfețe salariale, logging și operații CRUD pe colecții generice.</p>
+				<div class="proj-tags">
+				<span class="tag-sm">C#</span><span class="tag-sm">OOP</span><span class="tag-sm">Interfețe</span><span class="tag-sm">Moștenire</span>
+				</div>
+				<a class="proj-cta" href="https://github.com/mt10012/lucru-colegiu1" target="_blank" rel="noopener noreferrer">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 .5C5.73.5.5 5.73.5 12.02c0 5.1 3.29 9.42 7.86 10.95.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.37-3.88-1.37-.53-1.35-1.3-1.71-1.3-1.71-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.76.41-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.03 11.03 0 012.9-.39c.98 0 1.97.13 2.9.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.28 5.67.42.36.79 1.07.79 2.16 0 1.56-.01 2.82-.01 3.2 0 .31.21.68.8.56A11.53 11.53 0 0023.5 12.02C23.5 5.73 18.27.5 12 .5z"/></svg>
+					Vezi pe GitHub
+				</a>
+				</div>
+</div>
+</div>
+</section>
+
+<section id="competente" class="animate">
+<div class="section-label">competențe tehnice</div>
+<div class="skills-grid">
+<div class="skill-section">
+<div class="skill-cat">Frontend</div>
+<div class="skill-items">
+<div class="skill-item"><span>HTML5</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
+<div class="skill-item"><span>CSS3 / Animații</span><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
+<div class="skill-item"><span>JavaScript</span><div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div></div>
+<div class="skill-item"><span>Design Responsive</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
+</div>
+</div>
+<div class="skill-section">
+<div class="skill-cat">Programare</div>
+<div class="skill-items">
+<div class="skill-item"><span>C#</span><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div></div>
+<div class="skill-item"><span>Python</span><div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div></div>
+<div class="skill-item"><span>Java</span><div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div></div>
+<div class="skill-item"><span>C++</span><div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div></div>
+<div class="skill-item"><span>Rust</span><div class="skill-bar"><div class="skill-fill" style="width:30%"></div></div></div>
+</div>
+</div>
+<div class="skill-section">
+<div class="skill-cat">Instrumente</div>
+<div class="skill-items">
+<div class="skill-item"><span>Visual Studio</span><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
+<div class="skill-item"><span>draw.io / UML</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
+<div class="skill-item"><span>Git</span><div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div></div>
+<div class="skill-item"><span>Linux CLI</span><div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div></div>
+</div>
+</div>
+<div class="skill-section">
+<div class="skill-cat">Concepte</div>
+<div class="skill-items">
+<div class="skill-item"><span>Polimorfism</span><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div>
+<div class="skill-item"><span>Moștenire OOP</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
+<div class="skill-item"><span>Interfețe C#</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
+<div class="skill-item"><span>Design Patterns</span><div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div></div>
+</div>
+</div>
+<div class="skill-section">
+<div class="skill-cat">Backend</div>
+<div class="skill-items">
+<div class="skill-item"><span>ASP.NET Core</span><div class="skill-bar"><div class="skill-fill" style="width:40%"></div></div></div>
+<div class="skill-item"><span>MySQL / SQL Server</span><div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div></div>
+<div class="skill-item"><span>Sisteme de autentificare</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
+</div>
+</div>
+<div class="skill-section">
+<div class="skill-cat">Soft Skills</div>
+<div class="skill-items">
+<div class="skill-item"><span>Lucru în echipă</span><div class="skill-bar"><div class="skill-fill" style="width:100%"></div></div></div>
+<div class="skill-item"><span>Comunicare eficientă</span><div class="skill-bar"><div class="skill-fill" style="width:79%"></div></div></div>
+<div class="skill-item"><span>Adaptabilitate</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
+<div class="skill-item"><span>Managementul timpului</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="animate">
+<div class="section-label">limbi</div>
+<div class="langs-grid">
+<div class="lang-card">
+<div class="lang-name">Română</div>
+<div class="lang-level">MATERNĂ</div>
+</div>
+<div class="lang-card">
+<div class="lang-name">Engleză</div>
+<div class="lang-level">C1 — AVANSAT</div>
+</div>
+<div class="lang-card">
+<div class="lang-name">Franceză</div>
+<div class="lang-level">B1 — INTERMEDIAR</div>
+</div>
+<div class="lang-card">
+<div class="lang-name">Rusă</div>
+<div class="lang-level">A1 — ÎNCEPĂTOR</div>
+</div>
+</div>
+</section>
+
+<div class="footer-note animate">
+Malachi Matei · Grupa <span>DW2412</span> · 2026
+</div>
+</main>
+
+<script>
+const els=document.querySelectorAll('.animate');
+const obs=new IntersectionObserver(entries=>{
+entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+},{threshold:.1});
+els.forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
