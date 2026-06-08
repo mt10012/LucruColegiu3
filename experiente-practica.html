@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiențe acumulate — Practică</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#faf9f6;--surface:#ffffff;--card:#f5f3ef;--border:#e0ddd6;--border2:#ccc9c0;--ink:#1a1916;--muted:#7a776e;--accent:#c44b1f;--accent2:#1f6bc4;--accent3:#1f9c4b;--code-bg:#1e1c19;--code-text:#e8e4dc;--tag-bg:#ffeee8;--tag-color:#c44b1f;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+nav.cv-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:rgba(26,28,36,0.95);border-bottom:1px solid rgba(0,0,0,.12);padding:0 2rem}
+.cv-nav .nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.75);letter-spacing:.05em}
+.nav-brand span{color:#5b8dee}
+.nav-links{display:flex;gap:1rem}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.75);text-decoration:none;transition:color .2s;letter-spacing:.04em;padding:12px}
+.nav-links a:hover{color:#fff}
+.hero{background:var(--ink);padding:4rem 2rem 3rem;position:relative;overflow:hidden}
+.hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:1}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px)}
+.hero-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);background:rgba(196,75,31,.15);border:1px solid rgba(196,75,31,.3);padding:4px 12px;border-radius:3px;letter-spacing:.08em;margin-bottom:1.5rem}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:#fff;line-height:1.1;margin-bottom:1rem}
+.hero-desc{font-size:1.0rem;color:rgba(255,255,255,.55);max-width:700px;margin-bottom:1.5rem;font-weight:300;line-height:1.6}
+.container{max-width:720px;margin:0 auto;padding:3rem 2rem}
+.eseu{display:flex;flex-direction:column;gap:3.5rem}
+.capitol-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.capitol-label::after{content:'';flex:1;height:1px;background:rgba(196,75,31,.2)}
+.capitol h2{font-family:'Fraunces',serif;font-size:1.65rem;font-weight:300;color:var(--ink);line-height:1.2;margin-bottom:1.2rem}
+.capitol h2 em{font-style:italic;color:var(--muted)}
+.proza{font-size:1.0rem;color:#3a3834;line-height:1.85;font-weight:300}
+.proza p{margin-bottom:1.1rem}
+.proza p:last-child{margin-bottom:0}
+.proza strong{color:var(--ink);font-weight:500}
+.pullquote{border-left:3px solid var(--accent);padding:.9rem 1.2rem;margin:1.5rem 0;background:var(--tag-bg);border-radius:0 8px 8px 0}
+.pullquote p{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:300;font-style:italic;color:var(--ink);line-height:1.55;margin:0}
+.pullquote.blue{border-left-color:var(--accent2);background:rgba(31,107,196,.05)}
+.pullquote.green{border-left-color:var(--accent3);background:rgba(31,156,75,.05)}
+.sep{display:flex;align-items:center;gap:1rem;margin:.5rem 0}
+.sep span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--border2);letter-spacing:.1em}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--border)}
+.concluzie{background:var(--ink);border-radius:12px;padding:2rem;position:relative;overflow:hidden}
+.concluzie::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.03) 39px,rgba(255,255,255,.03) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.03) 39px,rgba(255,255,255,.03) 40px)}
+.concluzie-inner{position:relative;z-index:1}
+.concluzie .capitol-label{color:rgba(255,255,255,.35)}
+.concluzie .capitol-label::after{background:rgba(255,255,255,.1)}
+.concluzie h2{color:#fff}
+.concluzie .proza{color:rgba(255,255,255,.65)}
+.concluzie .proza strong{color:#fff}
+.concluzie .pullquote{border-left-color:rgba(255,255,255,.3);background:rgba(255,255,255,.05)}
+.concluzie .pullquote p{color:rgba(255,255,255,.85)}
+@media(max-width:620px){.hero h1{font-size:2rem}.container{padding:2rem 1.25rem}}
+</style>
+</head>
+<body>
+
+<nav class="cv-nav">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a href="polimorfism-static-cs.html">Polimorfism</a>
+      <a href="practica-probleme.html">Probleme Practică</a>
+      <a href="experiente-practica.html">Experiențe</a>
+      <a href="asumarea-raspunderii.html" class="active">Asumare responsabilitate</a>
+      <a href="agenda-practica.html" class="active">Agendă</a>
+      <a href="index.html">Curriculum Vitae</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-pill">Reflecție · Eseu personal</div>
+    <h1>Ce am învățat<br><em>la practică</em></h1>
+    <p class="hero-desc">Nu o listă de competențe bifate, ci o reflecție sinceră asupra a ceea ce s-a schimbat în modul în care gândesc și scriu cod.</p>
+  </div>
+</div>
+
+<main class="container">
+<div class="eseu">
+
+  <div class="capitol">
+    <div class="capitol-label">I · Început</div>
+    <h2>Cum am ajuns să înțeleg că nu știam nimic</h2>
+    <div class="proza">
+      <p>Înainte să înceapă practica, credeam că știu să programez. Știam să scriu un <code>for</code>, să declar variabile, să fac o funcție să returneze ceva. Aveam impresia că diferența dintre mine și un programator adevărat e cantitativă — mai mult cod, mai multă practică, mai multe funcții memorate.</p>
+      <p>Prima problemă mai serioasă m-a contrazis. Nu m-a blocat sintaxa. M-a blocat gândirea. Nu știam de unde să încep, cum să descompun problema, ce structură să aleg. Stăteam în fața unui enunț de zece rânduri și nu știam ce clasă să fac prima.</p>
+      <p>Asta a fost prima lecție reală a practicii: <strong>programarea nu înseamnă să știi sintaxă, ci să știi să gândești</strong>. Sintaxa se caută. Gândirea se formează în timp, și nu există scurtătură.</p>
+    </div>
+  </div>
+
+  <div class="sep"><span>· · ·</span></div>
+
+  <div class="capitol">
+    <div class="capitol-label">II · Algoritmi</div>
+    <h2>Când recursivitatea a făcut <em>click</em></h2>
+    <div class="proza">
+      <p>Am scris recursivitate și înainte. Dar o scriam mecanic — copiind un șablon, fără să înțeleg cu adevărat ce se întâmplă în memorie, de ce funcționează, de ce se oprește.</p>
+      <p>La problema cu anagramele în Python, ceva s-a schimbat. Am stat și am gândit pe hârtie înainte să scriu o linie de cod. Mi-am imaginat arborele de apeluri: la fiecare pas, aleg o literă care nu a fost folosită, o adaug, merg mai departe, mă întorc, o debifez. Simplu. Aproape banal, odată vizualizat.</p>
+      <div class="pullquote">
+        <p>Recursivitatea nu e un truc de programare. E o modalitate naturală de a exprima probleme care se repetă la scară mai mică — odată ce o vezi așa, nu mai poți s-o uiți.</p>
+      </div>
+      <p>Același moment a venit și cu programarea dinamică, la problema expresiilor booleene în Java. Acolo a fost mai greu — o tabelă bidimensională de sub-expresii, tratament separat pentru AND, OR și XOR. Am petrecut mai mult timp înțelegând problema decât scriind codul. Dar când am scris-o, a mers din prima. Și asta a fost o senzație pe care nu o mai simțisem până atunci.</p>
+    </div>
+  </div>
+
+  <div class="sep"><span>· · ·</span></div>
+
+  <div class="capitol">
+    <div class="capitol-label">III · OOP</div>
+    <h2>De ce moștenirea nu e despre <em>reutilizarea codului</em></h2>
+    <div class="proza">
+      <p>Am construit în cadrul practicii un sistem complet de gestiune universitară cu zece tipuri de persoane: studenți, angajați, lectori, contabili, juriști part-time, studenți bursieri și altele. Pe hârtie, pare un exercițiu pur tehnic. În realitate, a fost primul moment în care am înțeles ce înseamnă cu adevărat orientarea pe obiecte.</p>
+      <p>Intuiția greșită pe care o aveam era că moștenirea există ca să nu rescrii același cod. Că dacă <code>Angajat</code> și <code>Student</code> au amândoi un nume și o dată de naștere, e logic să le pui pe ambele să moștenească din ceva comun. Tehnic, e adevărat. Dar asta e o consecință, nu motivul.</p>
+      <div class="pullquote blue">
+        <p>Moștenirea există ca să modelezi o relație reală: un StudentAngajat este, în același timp, un Student și un Angajat. Dacă relația nu există în lumea reală, moștenirea e greșită, indiferent cât de mult cod îți economisește.</p>
+      </div>
+      <p>Am înțeles asta când am încercat să forțez o structură care nu era corectă și tot codul a început să pară ciudat, fragil. Am refăcut ierarhia pornind de la ce este fiecare entitate, nu de la ce câmpuri are — și totul s-a simplificat singur.</p>
+      <p>Același sistem m-a învățat că <strong>metodele abstracte nu sunt opționale</strong> când proiectezi o clasă de bază. Dacă lași un comportament concret acolo unde ar trebui să fie abstract, codul „merge", dar minți. Compilatorul nu te vede, dar oricine citește codul vede că ceva nu e în regulă.</p>
+    </div>
+  </div>
+
+  <div class="sep"><span>· · ·</span></div>
+
+  <div class="capitol">
+    <div class="capitol-label">IV · Limbaje</div>
+    <h2>Patru limbaje, <em>aceeași gândire</em></h2>
+    <div class="proza">
+      <p>Am lucrat în practică cu C++, C#, Java și Python. Nu simultan, ci pe rând — fiecare cu specificul lui, cu sintaxa lui, cu ecosistemul lui. La început părea intimidant. La final, a fost una dintre cele mai valoroase experiențe.</p>
+      <p>Covorul lui Sierpinski în C++ m-a pus față în față cu array-uri statice și cu rigiditatea unui limbaj fără garbage collector. Python m-a surprins cu cât de puțin cod îți trebuie să exprimi o idee clară — anagramele în zece linii, cu <code>enumerate()</code> și o funcție imbricată care citea aproape ca o propoziție. Java a fost aproape identic cu C# ca structură, dar mai verbos — și am realizat că verbozitatea nu e neapărat un defect, uneori forțează o claritate pe care sintaxa concisă o ascunde.</p>
+      <div class="pullquote green">
+        <p>Algoritmul de backtracking pentru anagrame e același în Python și în C#. Limbajul se schimbă, gândirea nu. Dacă știi să gândești corect, poți programa în orice limbaj în câteva săptămâni.</p>
+      </div>
+      <p>Nu am devenit expert în niciunul. Dar am ieșit din capcana identității de limbaj — din mentalitatea „sunt programator C#" în loc de „sunt programator care scrie momentan în C#". E o diferență mică de formulare, dar enormă ca mentalitate.</p>
+    </div>
+  </div>
+
+  <div class="sep"><span>· · ·</span></div>
+
+  <div class="capitol">
+    <div class="capitol-label">V · Proces</div>
+    <h2>Cum m-am schimbat în fața unui bug</h2>
+    <div class="proza">
+      <p>Există o diferență enormă între cum reacționam la un bug la începutul practicii și cum reacționez acum. La început, un mesaj de eroare era o sentință. Îl citeam superficial, intram în panică, modificam cod la întâmplare până ceva merge — fără să înțeleg de ce.</p>
+      <p>Undeva la mijlocul practicii, am început să mă opresc. Să citesc mesajul cu adevărat. Să mă întreb: <em>ce știe compilatorul că nu știu eu?</em> De obicei știa mai mult decât credeam — linia exactă, tipul incompatibil, metoda care nu există pe clasa respectivă.</p>
+      <p>Cel mai important obicei pe care l-am format a fost să <strong>nu modific codul înainte să înțeleg problema</strong>. Sună simplu. E surprinzător de greu de aplicat când ești frustrat și vrei să mergi mai departe. Dar fiecare dată când am respectat regula, am rezolvat bugul mai repede decât dacă aș fi ghicit.</p>
+      <p>Am mai înțeles că cele mai enervante bug-uri sunt cele logice — când codul compilează, rulează, dă un output, dar outputul e greșit. Acolo nu mai ajuți mesajele de eroare. Trebuie să gândești: ce valori ar trebui să aibă variabila asta la pasul trei? De ce are altceva? Unde s-a desprins firul?</p>
+    </div>
+  </div>
+
+  <div class="sep"><span>· · ·</span></div>
+
+  <div class="capitol">
+    <div class="capitol-label">VI · Sisteme</div>
+    <h2>Când codul devine prea mare pentru <em>a-l ține în cap</em></h2>
+    <div class="proza">
+      <p>Primele probleme din practică încăpeau în cap. Știam fiecare variabilă, fiecare funcție, fiecare flux posibil. Sistemul de rezervări aeriene sau cel de gestiune universitară nu mai încăpeau. Și asta a schimbat totul.</p>
+      <p>Am descoperit că structura codului nu e o chestiune estetică — e una funcțională. Dacă logica de business, validarea inputului și afișarea în consolă sunt toate amestecate în aceeași metodă, nu mai poți face o modificare fără să te temi că strici altceva. Separarea responsabilităților — fiecare clasă face un lucru, fiecare metodă face un lucru — nu e o regulă inventată de puriste. E soluția practică la problema că mintea umană nu poate ține simultan sute de linii de cod interdependente.</p>
+      <div class="pullquote">
+        <p>Codul bun nu e codul care funcționează. E codul pe care îl poți modifica peste o săptămână fără să-ți fie frică.</p>
+      </div>
+      <p>Nu am stăpânit asta complet în practică. Am stăpânit-o suficient cât să înțeleg de ce contează — și asta e un început mai bun decât să continui să scrii cod care merge dar pe care nu-l înțelege nimeni, nici măcar tu.</p>
+    </div>
+  </div>
+
+  <div class="sep"><span>· · ·</span></div>
+
+  <div class="concluzie">
+    <div class="concluzie-inner">
+      <div class="capitol-label">VII · Final</div>
+      <h2>Ce rămâne după practică</h2>
+      <div class="proza">
+        <p>Dacă ar trebui să rezum practica într-o singură schimbare, ar fi asta: am trecut de la a scrie cod la a gândi în cod. Nu e o diferență de cantitate, e una de calitate.</p>
+        <p>Am ieșit din practică cu mai multe întrebări decât am intrat. Știu acum că există design patterns pe care nu le-am aplicat, baze de date pe care nu le înțeleg, testare automată pe care o ignor, și o distanță reală între ce știu și ce ar trebui să știu pentru a scrie software de calitate.</p>
+        <p>Dar știu și că distanța asta nu e descurajantă — e un drum. Și că primul pas, cel mai greu, e să o vezi. Înainte de practică, nu o vedeam. Acum o văd. Și asta e, probabil, <strong>cel mai important lucru pe care l-am învățat</strong>.</p>
+        <div class="pullquote">
+          <p>Programarea nu e o destinație unde ajungi odată ce înveți suficient. E un meșteșug care se rafinează toată viața — și practica a fost primul an de ucenicie.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer style="background:var(--ink);padding:1.5rem;text-align:center;color:rgba(255,255,255,.6)">Malachi Matei · Practică · 2026</footer>
+
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda — Practică</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#faf9f6;--surface:#ffffff;--card:#f5f3ef;--border:#e0ddd6;--border2:#ccc9c0;--ink:#1a1916;--muted:#7a776e;--accent:#c44b1f;--accent2:#1f6bc4;--accent3:#1f9c4b;--code-bg:#1e1c19;--code-text:#e8e4dc;--tag-bg:#ffeee8;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+nav.cv-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:rgba(26,28,36,0.95);border-bottom:1px solid rgba(0,0,0,.12);padding:0 2rem}
+.cv-nav .nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.75);letter-spacing:.05em}
+.nav-brand span{color:#5b8dee}
+.nav-links{display:flex;gap:1rem}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.75);text-decoration:none;transition:color .2s;letter-spacing:.04em;padding:12px}
+.nav-links a:hover{color:#fff}
+.hero{background:var(--ink);padding:4rem 2rem 3rem;position:relative;overflow:hidden}
+.hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:1}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px)}
+.hero-pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);background:rgba(196,75,31,.15);border:1px solid rgba(196,75,31,.3);padding:4px 12px;border-radius:3px;letter-spacing:.08em;margin-bottom:1.5rem}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:#fff;line-height:1.1;margin-bottom:1rem}
+.hero-desc{font-size:1.0rem;color:rgba(255,255,255,.55);max-width:700px;margin-bottom:1.5rem;font-weight:300;line-height:1.6}
+.container{max-width:960px;margin:0 auto;padding:2rem}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;text-align:center}
+.stat-num{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:300;line-height:1;margin-bottom:.3rem}
+.stat-num.red{color:var(--accent)}
+.stat-num.blue{color:var(--accent2)}
+.stat-num.green{color:var(--accent3)}
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:2rem 0 1rem;display:flex;align-items:center;gap:.75rem}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Sarcini table */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:2rem;overflow:hidden}
+.section-head{background:var(--ink);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.section-head-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:300;color:#fff}
+.section-head-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.06em}
+.sarcini-table{width:100%;border-collapse:collapse}
+.sarcini-table th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--card);padding:.6rem 1rem;text-align:left;border-bottom:1px solid var(--border)}
+.sarcini-table td{font-size:.88rem;padding:.65rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--ink)}
+.sarcini-table tr:last-child td{border-bottom:none}
+.sarcini-table tr:hover td{background:rgba(31,107,196,.025)}
+.prob-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--accent2);background:rgba(31,107,196,.08);border:1px solid rgba(31,107,196,.15);padding:2px 7px;border-radius:999px;white-space:nowrap}
+.date-cell{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--muted)}
+.days-cell{font-family:'IBM Plex Mono',monospace;font-size:.8rem;text-align:center}
+.ahead-chip{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.04em;color:var(--accent3);background:rgba(31,156,75,.08);border:1px solid rgba(31,156,75,.2);padding:2px 6px;border-radius:999px;margin-left:.4rem}
+
+/* Zile grid */
+.zile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem}
+.zi-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(26,25,22,.04);display:flex;flex-direction:column}
+.zi-header{background:var(--ink);padding:.75rem 1.1rem;display:flex;align-items:center;justify-content:space-between}
+.zi-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:300;color:#fff}
+.zi-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:2px 8px;border-radius:999px}
+.zi-body{padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.85rem;flex:1}
+.camp-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:.3rem}
+.camp-label.green{color:var(--accent3)}
+.camp-label.muted{color:var(--muted)}
+.camp-text{font-size:.9rem;color:var(--ink);line-height:1.5}
+.divider{height:1px;background:var(--border)}
+.status-chip{display:inline-flex;align-items:center;gap:.35rem;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;padding:3px 9px;border-radius:999px}
+.status-chip.success{background:rgba(31,156,75,.1);border:1px solid rgba(31,156,75,.2);color:var(--accent3)}
+.status-chip.success::before{content:'✓'}
+
+/* Activitati saptamanale */
+.sapt-grid{display:grid;gap:1.5rem;margin-bottom:2rem}
+.sapt-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(26,25,22,.04)}
+.sapt-header{background:linear-gradient(135deg,var(--ink) 0%,#2a2825 100%);padding:.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.sapt-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:300;color:#fff}
+.sapt-period{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.06em}
+.zi-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.zi-row:last-child{border-bottom:none}
+.zi-date{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--muted);padding:.85rem 1rem;background:var(--card);border-right:1px solid var(--border);display:flex;align-items:flex-start;padding-top:.9rem}
+.zi-content{font-size:.9rem;color:var(--ink);padding:.85rem 1.1rem;line-height:1.55}
+
+/* Concluzii */
+.concluzie-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:1rem}
+.concluzie-q{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--accent2);margin-bottom:.6rem}
+.concluzie-a{font-size:.95rem;color:var(--muted);line-height:1.7}
+.concluzie-a strong{color:var(--ink);font-weight:500}
+
+@media(max-width:720px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .zile-grid{grid-template-columns:1fr}
+  .zi-row{grid-template-columns:1fr}
+  .zi-date{border-right:none;border-bottom:1px solid var(--border)}
+  .hero h1{font-size:2rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="cv-nav">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a href="polimorfism-static-cs.html">Polimorfism</a>
+      <a href="practica-probleme.html">Probleme Practică</a>
+      <a href="experiente-practica.html">Experiențe</a>
+      <a href="asumarea-raspunderii.html" class="active">Asumare responsabilitate</a>
+      <a href="agenda-practica.html" class="active">Agendă</a>
+      <a href="index.html">Curriculum Vitae</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-pill">Cap. 1 · Planificarea activităților zilnice</div>
+    <h1>Agenda practicii<br><em>Malachi Matei · DW2412</em></h1>
+    <p class="hero-desc">Fiecare elev completează zilnic obiectivele propuse și sarcinile realizate. În cazul nereușitei sau realizării mai multor sarcini, la compartimentul comentarii se va include comentariul respectiv.</p>
+  </div>
+</div>
+
+<main class="container">
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num blue">11</div>
+      <div class="stat-label">Probleme rezolvate</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num green">10</div>
+      <div class="stat-label">Zile de practică</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num red">90</div>
+      <div class="stat-label">Ore totale</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Sarcini finalizate</div>
+    </div>
+  </div>
+
+  <!-- IV. Sarcini de lucru -->
+  <div class="section-label">IV · Sarcini de lucru</div>
+
+  <div class="section">
+    <div class="section-head">
+      <span class="section-head-title">Activități / Sarcini de lucru</span>
+      <span class="section-head-sub">Planificat vs. Realizat</span>
+    </div>
+    <table class="sarcini-table">
+      <thead>
+        <tr>
+          <th>Problemă</th>
+          <th>Termen planificat</th>
+          <th style="text-align:center">Zile plan.</th>
+          <th>Termen realizat</th>
+          <th style="text-align:center">Zile real.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="prob-badge">M1.2</span></td>
+          <td class="date-cell">25.05.2026</td>
+          <td class="days-cell">1</td>
+          <td class="date-cell">25.05.2026</td>
+          <td class="days-cell">1</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">M3.15</span></td>
+          <td class="date-cell">25.05.2026</td>
+          <td class="days-cell">1</td>
+          <td class="date-cell">25.05.2026</td>
+          <td class="days-cell">1</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">M2.21</span></td>
+          <td class="date-cell">26.05.2026 – 27.05.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">26.05.2026 <span class="ahead-chip">mai devreme</span></td>
+          <td class="days-cell">1</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">M3.31</span></td>
+          <td class="date-cell">26.05.2026 – 27.05.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">26.05.2026 <span class="ahead-chip">mai devreme</span></td>
+          <td class="days-cell">1</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">M6.6</span></td>
+          <td class="date-cell">26.05.2026 – 27.05.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">26.05.2026 – 27.05.2026</td>
+          <td class="days-cell">2</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">M4.10</span></td>
+          <td class="date-cell">03.06.2026 – 04.06.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">03.06.2026 <span class="ahead-chip">mai devreme</span></td>
+          <td class="days-cell">1</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">M5.5</span></td>
+          <td class="date-cell">03.06.2026 – 04.06.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">03.06.2026 – 04.06.2026</td>
+          <td class="days-cell">2</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">M6.21</span></td>
+          <td class="date-cell">03.06.2026 – 04.06.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">03.06.2026 – 04.06.2026</td>
+          <td class="days-cell">2</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">POO 18</span></td>
+          <td class="date-cell">08.06.2026 – 09.06.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">08.06.2026 – 09.06.2026</td>
+          <td class="days-cell">2</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">POO 11</span></td>
+          <td class="date-cell">08.06.2026 – 09.06.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">08.06.2026 <span class="ahead-chip">mai devreme</span></td>
+          <td class="days-cell">1</td>
+        </tr>
+        <tr>
+          <td><span class="prob-badge">Sarcină suplimentară</span></td>
+          <td class="date-cell">08.06.2026 – 09.06.2026</td>
+          <td class="days-cell">2</td>
+          <td class="date-cell">08.06.2026 <span class="ahead-chip">mai devreme</span></td>
+          <td class="days-cell">1</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Planificarea zilnica -->
+  <div class="section-label">Cap. 1 · Planificarea activităților zilnice</div>
+
+  <div class="zile-grid">
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 1</span>
+        <span class="zi-badge">M1.8</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problema m1.8</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema m1.8</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">realizat cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 2</span>
+        <span class="zi-badge">M2.12</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat problema m2.12</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema m2.12</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">realizat cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 3</span>
+        <span class="zi-badge">M3.10 · M3.25</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problemele m3.10 și m3.25</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problemele m3.10 și m3.25</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">am realizat problemele cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 4</span>
+        <span class="zi-badge">M4.10</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problema m4.10</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema m4.10</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">am realizat problema cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 5</span>
+        <span class="zi-badge">M5.17</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problema m5.17</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema m5.17</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">am realizat problema cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 6</span>
+        <span class="zi-badge">M6.1</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problema m6.1</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema m6.1</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">am realizat problema cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 7</span>
+        <span class="zi-badge">M6.22</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problema m6.22</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema m6.22</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">am realizat problema cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 8</span>
+        <span class="zi-badge">POO 3</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problema POO 3</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema POO 3</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">am realizat problema cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 9</span>
+        <span class="zi-badge">POO 10</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac problema POO 10</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat problema POO 10</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">am realizat problema cu succes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zi-card">
+      <div class="zi-header">
+        <span class="zi-title">Ziua 10</span>
+        <span class="zi-badge">Raport · Agendă</span>
+      </div>
+      <div class="zi-body">
+        <div class="camp">
+          <div class="camp-label">Obiective planificate</div>
+          <div class="camp-text">Am planificat să fac raportul</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label green">Sarcini realizate</div>
+          <div class="camp-text">Am realizat raportul și agenda</div>
+        </div>
+        <div class="divider"></div>
+        <div class="camp">
+          <div class="camp-label muted">Comentarii</div>
+          <span class="status-chip success">realizat cu succes</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- V. Activitati saptamanale -->
+  <div class="section-label">V · Descrierea activităților realizate</div>
+
+  <div class="sapt-grid">
+    <div class="sapt-card">
+      <div class="sapt-header">
+        <span class="sapt-title">Săptămâna I</span>
+        <span class="sapt-period">25.05.2026 – 29.05.2026</span>
+      </div>
+      <div class="sapt-body">
+        <div class="zi-row">
+          <div class="zi-date">25.05.2026</div>
+          <div class="zi-content">Familiarizarea cu materia stagiului de practică, realizarea problemelor M1.2 și M2.21.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">26.05.2026</div>
+          <div class="zi-content">Studierea metodelor de programare.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">27.05.2026</div>
+          <div class="zi-content">Realizarea problemelor M2.21, M3.31, M6.6.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">28.05.2026</div>
+          <div class="zi-content">Verificarea soluțiilor implementate, corectarea erorilor și consolidarea cunoștințelor dobândite.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">29.05.2026</div>
+          <div class="zi-content">Documentarea activităților efectuate și pregătirea raportului săptămânal de practică.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sapt-card">
+      <div class="sapt-header">
+        <span class="sapt-title">Săptămâna II</span>
+        <span class="sapt-period">01.06.2026 – 05.06.2026</span>
+      </div>
+      <div class="sapt-body">
+        <div class="zi-row">
+          <div class="zi-date">01.06.2026</div>
+          <div class="zi-content">Studierea metodelor avansate de programare și pregătirea pentru rezolvarea problemelor din modulul M4.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">02.06.2026</div>
+          <div class="zi-content">Analiza cerințelor și elaborarea algoritmilor pentru problemele planificate.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">03.06.2026</div>
+          <div class="zi-content">Realizarea și testarea problemei M4.10.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">04.06.2026</div>
+          <div class="zi-content">Realizarea problemelor M5.5, M6.21 și M6.6, verificarea corectitudinii soluțiilor.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">05.06.2026</div>
+          <div class="zi-content">Optimizarea programelor realizate, corectarea erorilor și documentarea rezultatelor obținute.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sapt-card">
+      <div class="sapt-header">
+        <span class="sapt-title">Săptămâna III</span>
+        <span class="sapt-period">08.06.2026 – 12.06.2026</span>
+      </div>
+      <div class="sapt-body">
+        <div class="zi-row">
+          <div class="zi-date">08.06.2026</div>
+          <div class="zi-content">Realizarea și testarea problemei POO 18, aplicând concepte de programare orientată pe obiecte.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">09.06.2026</div>
+          <div class="zi-content">Realizarea problemei POO 11 și a sarcinii suplimentare, verificarea funcționalității și corectarea erorilor.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">10.06.2026</div>
+          <div class="zi-content">Revizuirea și optimizarea soluțiilor dezvoltate în cadrul modulelor POO.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">11.06.2026</div>
+          <div class="zi-content">Finalizarea raportului de practică și evaluarea rezultatelor obținute pe parcursul stagiului.</div>
+        </div>
+        <div class="zi-row">
+          <div class="zi-date">12.06.2026</div>
+          <div class="zi-content" style="color:var(--muted);font-style:italic">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VI. Concluzii -->
+  <div class="section-label">VI · Concluziile elevului</div>
+
+  <div class="concluzie-card">
+    <div class="concluzie-q">În ce măsură stagiul de practică v-a fost util?</div>
+    <div class="concluzie-a"><strong>a) În mare măsură.</strong></div>
+  </div>
+  <div class="concluzie-card">
+    <div class="concluzie-q">Aspectele pozitive ale stagiului de practică</div>
+    <div class="concluzie-a">Stagiul de practică a contribuit la consolidarea cunoștințelor de programare și la dezvoltarea abilităților practice de rezolvare a problemelor. De asemenea, a oferit posibilitatea aplicării noțiunilor teoretice studiate și acumulării unei experiențe utile pentru activitatea profesională viitoare.</div>
+  </div>
+  <div class="concluzie-card">
+    <div class="concluzie-q">Ce nu v-a plăcut în cadrul stagiului de practică?</div>
+    <div class="concluzie-a">În cadrul stagiului de practică, nu au existat aspecte majore negative, însă uneori anumite sarcini nu au fost suficient de detaliate sau clar explicate din prima. Din acest motiv, a fost necesar un timp suplimentar pentru clarificări și înțelegerea completă a cerințelor.</div>
+  </div>
+
+</main>
+
+<footer style="background:var(--ink);padding:1.5rem;text-align:center;color:rgba(255,255,255,.6)">Malachi Matei · DW2412 · Practica de Instruire · 2026</footer>
+
+</body>
+</html>
