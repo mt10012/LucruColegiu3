@@ -97,6 +97,7 @@ pre{padding:1.25rem 1.25rem;overflow-x:auto;line-height:1.7;color:var(--code-tex
 .explain-box{background:linear-gradient(135deg,#fff9f6,#fff);border:1px solid #f0d8cc;border-left:3px solid var(--accent);border-radius:8px;padding:1.25rem 1.5rem;margin:1rem 0 1.5rem}
 .explain-box .explain-head{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);margin-bottom:.5rem;letter-spacing:.06em}
 .explain-box p{font-size:.9rem;line-height:1.7;color:#5a4a3a}
+.explain-box p+p{margin-top:.6rem}
 
 .explain-box.blue{background:linear-gradient(135deg,#f5f9ff,#fff);border-left-color:var(--accent2);border-color:#ccd8f0}
 .explain-box.blue .explain-head{color:var(--accent2)}
@@ -188,7 +189,7 @@ footer{background:var(--ink);padding:2rem;text-align:center}
 <h1>Polimorfism <em>Static</em><br>în C#</h1>
 <p class="hero-desc">O explorare aprofundată a polimorfismului static — cum funcționează, de ce există și cum îl aplici în practică, explicat din mai multe unghiuri.</p>
 <div class="hero-meta">
-<span class="meta-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>~15 min lectură</span>
+<span class="meta-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>~30 min lectură</span>
 <span class="meta-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>4 secțiuni</span>
 <span class="meta-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>Exemple cod C#</span>
 </div>
@@ -204,9 +205,10 @@ footer{background:var(--ink);padding:2rem;text-align:center}
 </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════ PAGE 1 ═══ -->
 <div id="p1" class="page active">
 <h2 class="sec">Ce este polimorfismul static?</h2>
-<p class="sec-lead">Polimorfismul este unul dintre pilonii fundamentali ai programării orientate obiect. Există două forme principale — statică și dinamică. Să înțelegem mai întâi ce înseamnă forma statică.</p>
+<p class="sec-lead">Polimorfismul este unul dintre pilonii fundamentali ai programării orientate obiect. Există două forme principale — statică și dinamică. Să înțelegem mai întâi ce înseamnă forma statică și de unde vine necesitatea ei.</p>
 
 <div class="intro-grid">
 <div class="info-box accent-left">
@@ -238,20 +240,28 @@ footer{background:var(--ink);padding:2rem;text-align:center}
 </div>
 </div>
 
+<div class="analogy-card">
+<div class="analogy-icon">🗺️</div>
+<div class="analogy-content">
+<div class="analogy-title">GPS cu itinerare prestabilite</div>
+<p class="analogy-text">Un sistem GPS care cunoaște din start trei rute posibile între două orașe — pe autostradă, pe drum național, pe drumuri lăturalnice. Înainte să pornești la drum, GPS-ul îți afișează ruta completă; nu recalculează în mers. Polimorfismul static funcționează la fel: compilatorul trasează "ruta" (apelul de metodă corect) înainte de execuție, pe baza informațiilor disponibile la compilare.</p>
+</div>
+</div>
+
 <h3 class="sub"><span class="num">2</span> Formele polimorfismului static în C#</h3>
 <div class="timeline">
 <div class="tl-item">
 <div class="tl-dot r">1</div>
 <div class="tl-content">
 <div class="tl-title">Supraîncărcarea metodelor (Method Overloading)</div>
-<p class="tl-text">Mai multe metode cu același nume, dar cu semnături diferite (parametri diferiți). Compilatorul alege metoda potrivită în funcție de tipul și numărul argumentelor.</p>
+<p class="tl-text">Mai multe metode cu același nume, dar cu semnături diferite (parametri diferiți). Compilatorul alege metoda potrivită în funcție de tipul și numărul argumentelor. Este cea mai frecvent întâlnită formă în codul de zi cu zi.</p>
 </div>
 </div>
 <div class="tl-item">
 <div class="tl-dot b">2</div>
 <div class="tl-content">
 <div class="tl-title">Supraîncărcarea operatorilor (Operator Overloading)</div>
-<p class="tl-text">Redefinirea comportamentului operatorilor (+, -, *, etc.) pentru tipuri de date personalizate. Compilatorul traduce expresia <code>a + b</code> în apelul metodei <code>op_Addition(a, b)</code>.</p>
+<p class="tl-text">Redefinirea comportamentului operatorilor (+, -, *, etc.) pentru tipuri de date personalizate. Compilatorul traduce expresia <code>a + b</code> în apelul metodei <code>op_Addition(a, b)</code>. Util în special pentru tipuri matematice sau structuri de date custom.</p>
 </div>
 </div>
 <div class="tl-item">
@@ -263,15 +273,106 @@ footer{background:var(--ink);padding:2rem;text-align:center}
 </div>
 </div>
 
+<h3 class="sub"><span class="num">3</span> Cum vede compilatorul codul</h3>
+<p class="sec-lead" style="margin-bottom:1rem">Să urmărim pas cu pas ce se întâmplă atunci când compilatorul C# întâlnește un apel de metodă supraîncărcată.</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">ResolutionDemo.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="k">public class</span> <span class="t">Printer</span>
+{
+    <span class="k">public void</span> <span class="n">Print</span>(<span class="k">int</span> x)    { <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"int: " + x</span>); }
+    <span class="k">public void</span> <span class="n">Print</span>(<span class="k">double</span> x) { <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"double: " + x</span>); }
+    <span class="k">public void</span> <span class="n">Print</span>(<span class="k">string</span> x) { <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"string: " + x</span>); }
+}
+
+<span class="t">Printer</span> p = <span class="k">new</span> <span class="t">Printer</span>();
+
+<span class="c">// Pasul 1 — compilatorul vede literalul 42 → tip int → alege Print(int)</span>
+p.<span class="n">Print</span>(<span class="m">42</span>);           <span class="c">// → "int: 42"</span>
+
+<span class="c">// Pasul 2 — 3.14 este double literal → alege Print(double)</span>
+p.<span class="n">Print</span>(<span class="m">3.14</span>);         <span class="c">// → "double: 3.14"</span>
+
+<span class="c">// Pasul 3 — "salut" este string literal → alege Print(string)</span>
+p.<span class="n">Print</span>(<span class="s">"salut"</span>);      <span class="c">// → "string: salut"</span>
+
+<span class="c">// Pasul 4 — variabilă de tip int → rezolvat la compilare, nu la runtime</span>
+<span class="k">int</span> numar = <span class="m">100</span>;
+p.<span class="n">Print</span>(numar);        <span class="c">// → "int: 100" — ales la compilare!</span></pre>
+</div>
+
+<div class="explain-box">
+<div class="explain-head">🔍 CE SE ÎNTÂMPLĂ ÎN SPATE</div>
+<p>Compilatorul C# parcurge un algoritm de rezoluție a supraîncărcării (overload resolution) în mai mulți pași: mai întâi identifică toate metodele cu același nume, apoi elimină pe cele cu număr incompatibil de parametri, apoi aplică conversiile implicite posibile, și în final alege cea mai specifică potrivire. Dacă nu există o potrivire unică, rezultă o eroare de compilare — niciodată o surpriză la runtime.</p>
+</div>
+
+<h3 class="sub"><span class="num">4</span> Polimorfism static vs polimorfism dinamic — prima privire</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">Chiar de la început, merită să înțelegi cum se deosebesc cele două forme. Vom detalia în secțiunea 4, dar iată esența:</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">PrimaComparatie.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// ── STATIC: compilatorul alege la build time ──────────────</span>
+<span class="k">public class</span> <span class="t">Salut</span>
+{
+    <span class="k">public void</span> <span class="n">Afiseaza</span>(<span class="k">string</span> nume)
+        =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"Bună, {nume}!"</span>);
+
+    <span class="k">public void</span> <span class="n">Afiseaza</span>(<span class="k">string</span> nume, <span class="k">string</span> titlu)
+        =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"Bună, {titlu} {nume}!"</span>);
+}
+<span class="c">// La compilare: Afiseaza("Ana") → prima variantă, întotdeauna.</span>
+
+
+<span class="c">// ── DINAMIC: runtime-ul alege la execuție ─────────────────</span>
+<span class="k">public abstract class</span> <span class="t">Forma</span>
+{
+    <span class="k">public abstract double</span> <span class="n">Arie</span>();
+}
+<span class="k">public class</span> <span class="t">Cerc</span> : <span class="t">Forma</span>
+{
+    <span class="k">public double</span> Raza;
+    <span class="k">public override double</span> <span class="n">Arie</span>() =&gt; <span class="t">Math</span>.PI * Raza * Raza;
+}
+<span class="c">// La runtime: forma.Arie() poate fi Cerc.Arie(), Patrat.Arie() etc.</span>
+<span class="c">// Depinde de tipul real al obiectului — necunoscut la compilare.</span></pre>
+</div>
+
 <div class="explain-box">
 <div class="explain-head">💡 DE REȚINUT</div>
 <p>Polimorfismul static nu înlocuiește polimorfismul dinamic — le servesc scopuri diferite. Cel static oferă performanță maximă și siguranță la compilare. Cel dinamic oferă flexibilitate la runtime. Un programator bun știe când să folosească fiecare.</p>
+<p>O regulă practică: dacă știi exact cu ce tipuri lucrezi și logica nu se schimbă în funcție de tipul obiectului la runtime → polimorfism static. Dacă ai o ierarhie de obiecte cu comportament diferit care se poate extinde în viitor → polimorfism dinamic.</p>
+</div>
+
+<h3 class="sub"><span class="num">5</span> Avantajele polimorfismului static</h3>
+<div class="timeline">
+<div class="tl-item">
+<div class="tl-dot r">⚡</div>
+<div class="tl-content">
+<div class="tl-title">Performanță zero-overhead</div>
+<p class="tl-text">Nu există nicio structură suplimentară de tabele virtuale (vtable), nicio căutare la runtime, niciun nivel de indirectare. Apelul de metodă este compilat direct în instrucțiunea de salt corectă. În aplicații cu bucle strânse sau sisteme critice la performanță, această diferență contează.</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-dot b">🛡️</div>
+<div class="tl-content">
+<div class="tl-title">Siguranță la compilare</div>
+<p class="tl-text">Orice eroare de tip (de exemplu, pasarea unui <code>bool</code> acolo unde se așteaptă un <code>int</code> fără conversie implicită) este detectată înainte ca programul să ruleze. Nu ajungi la <code>InvalidCastException</code> sau comportament ciudat la runtime.</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-dot g">📖</div>
+<div class="tl-content">
+<div class="tl-title">Lizibilitate și intenție clară</div>
+<p class="tl-text">A putea scrie <code>calc.Aduna(3, 4)</code> și <code>calc.Aduna(3.14, 2.71)</code> cu același nume de metodă face codul mai natural de citit. Alternativa — <code>AdunaIntregi</code>, <code>AdunaDouble</code>, <code>AdunaTriple</code> — poluează namespace-ul și crește sarcina cognitivă.</p>
+</div>
+</div>
 </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════ PAGE 2 ═══ -->
 <div id="p2" class="page">
 <h2 class="sec">Supraîncărcarea metodelor</h2>
-<p class="sec-lead">Method overloading este cea mai comună formă de polimorfism static. Permite definirea mai multor versiuni ale aceleiași metode, diferențiate prin semnătura lor.</p>
+<p class="sec-lead">Method overloading este cea mai comună formă de polimorfism static. Permite definirea mai multor versiuni ale aceleiași metode, diferențiate prin semnătura lor. Este o funcționalitate pe care o vei folosi zilnic în C#.</p>
 
 <h3 class="sub"><span class="num">1</span> Exemplu de bază</h3>
 
@@ -310,7 +411,48 @@ footer{background:var(--ink);padding:2rem;text-align:center}
 <p>Când scrii <code>calc.Aduna(3, 4)</code>, compilatorul vede că ambele argumente sunt <code>int</code> și alege prima supraîncărcare. Când scrii <code>calc.Aduna(3.14, 2.71)</code>, alege a doua. Această decizie este finală la compilare — la runtime nu există nicio verificare sau decizie suplimentară.</p>
 </div>
 
-<h3 class="sub"><span class="num">2</span> Supraîncărcarea operatorilor</h3>
+<h3 class="sub"><span class="num">2</span> Supraîncărcarea cu parametri opționali și params</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">C# oferă și alte mecanisme legate de supraîncărcare: parametrii opționali (cu valori implicite) și cuvântul cheie <code>params</code>, care permit flexibilitate fără a defini zeci de supraîncărcări manuale.</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">ParametriOptionali.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="k">public class</span> <span class="t">Mesagerie</span>
+{
+    <span class="c">// Parametri opționali — valori implicite</span>
+    <span class="k">public void</span> <span class="n">TrimiteEmail</span>(
+        <span class="k">string</span> destinatar,
+        <span class="k">string</span> subiect = <span class="s">"Fără subiect"</span>,
+        <span class="k">bool</span> urgent = <span class="k">false</span>)
+    {
+        <span class="k">string</span> prefix = urgent ? <span class="s">"[URGENT] "</span> : <span class="s">""</span>;
+        <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"Către: {destinatar} | {prefix}{subiect}"</span>);
+    }
+
+    <span class="c">// params — număr variabil de argumente</span>
+    <span class="k">public int</span> <span class="n">Suma</span>(<span class="k">params int</span>[] numere)
+    {
+        <span class="k">int</span> total = <span class="m">0</span>;
+        <span class="k">foreach</span> (<span class="k">int</span> n <span class="k">in</span> numere) total += n;
+        <span class="k">return</span> total;
+    }
+}
+
+<span class="c">// Utilizare</span>
+<span class="t">Mesagerie</span> m = <span class="k">new</span> <span class="t">Mesagerie</span>();
+m.<span class="n">TrimiteEmail</span>(<span class="s">"ana@test.ro"</span>);                          <span class="c">// subiect implicit</span>
+m.<span class="n">TrimiteEmail</span>(<span class="s">"ion@test.ro"</span>, <span class="s">"Întâlnire mâine"</span>);        <span class="c">// fără urgent</span>
+m.<span class="n">TrimiteEmail</span>(<span class="s">"sef@test.ro"</span>, <span class="s">"Raport"</span>, <span class="k">true</span>);           <span class="c">// toți parametrii</span>
+
+<span class="k">int</span> s1 = m.<span class="n">Suma</span>(<span class="m">1</span>, <span class="m">2</span>, <span class="m">3</span>);              <span class="c">// → 6</span>
+<span class="k">int</span> s2 = m.<span class="n">Suma</span>(<span class="m">10</span>, <span class="m">20</span>, <span class="m">30</span>, <span class="m">40</span>, <span class="m">50</span>);   <span class="c">// → 150</span></pre>
+</div>
+
+<div class="explain-box">
+<div class="explain-head">⚠️ ATENȚIE LA AMBIGUITATE</div>
+<p>Dacă ai atât o supraîncărcare explicită cât și parametri opționali care ar putea să se suprapună, compilatorul C# va prefera întotdeauna metoda cu corespondență exactă față de cea cu parametri opționali. De exemplu, dacă există <code>Suma(int a, int b)</code> și <code>Suma(params int[] n)</code>, apelul <code>Suma(1, 2)</code> va folosi prima variantă. Reține această regulă pentru a evita comportamente neașteptate.</p>
+</div>
+
+<h3 class="sub"><span class="num">3</span> Supraîncărcarea operatorilor</h3>
 
 <div class="code-block">
 <div class="code-header"><span class="code-filename">Punct2D.cs</span><span class="code-lang">C#</span></div>
@@ -331,6 +473,18 @@ footer{background:var(--ink);padding:2rem;text-align:center}
         <span class="k">return new</span> <span class="t">Punct2D</span>(a.X + b.X, a.Y + b.Y);
     }
 
+    <span class="c">// Supraîncărcăm operatorul -</span>
+    <span class="k">public static</span> <span class="t">Punct2D</span> <span class="k">operator</span> -(<span class="t">Punct2D</span> a, <span class="t">Punct2D</span> b)
+    {
+        <span class="k">return new</span> <span class="t">Punct2D</span>(a.X - b.X, a.Y - b.Y);
+    }
+
+    <span class="c">// Supraîncărcăm operatorul * cu un scalar</span>
+    <span class="k">public static</span> <span class="t">Punct2D</span> <span class="k">operator</span> *(<span class="t">Punct2D</span> p, <span class="k">double</span> factor)
+    {
+        <span class="k">return new</span> <span class="t">Punct2D</span>(p.X * factor, p.Y * factor);
+    }
+
     <span class="c">// Supraîncărcăm operatorul ==</span>
     <span class="k">public static bool operator</span> ==(<span class="t">Punct2D</span> a, <span class="t">Punct2D</span> b)
     {
@@ -342,6 +496,10 @@ footer{background:var(--ink);padding:2rem;text-align:center}
         <span class="k">return</span> !(a == b);
     }
 
+    <span class="c">// Distanța față de origine</span>
+    <span class="k">public double</span> <span class="n">Lungime</span>()
+        =&gt; <span class="t">Math</span>.<span class="n">Sqrt</span>(X * X + Y * Y);
+
     <span class="k">public override string</span> <span class="n">ToString</span>()
     {
         <span class="k">return</span> <span class="s">$"({X}, {Y})"</span>;
@@ -352,24 +510,126 @@ footer{background:var(--ink);padding:2rem;text-align:center}
 <span class="t">Punct2D</span> p1 = <span class="k">new</span> <span class="t">Punct2D</span>(<span class="m">2</span>, <span class="m">3</span>);
 <span class="t">Punct2D</span> p2 = <span class="k">new</span> <span class="t">Punct2D</span>(<span class="m">4</span>, <span class="m">1</span>);
 <span class="t">Punct2D</span> p3 = p1 + p2;          <span class="c">// → (6, 4)</span>
-<span class="k">bool</span> egal = (p1 == p2);        <span class="c">// → false</span></pre>
+<span class="t">Punct2D</span> p4 = p1 - p2;          <span class="c">// → (-2, 2)</span>
+<span class="t">Punct2D</span> p5 = p1 * <span class="m">3.0</span>;         <span class="c">// → (6, 9)</span>
+<span class="k">bool</span> egal = (p1 == p2);        <span class="c">// → false</span>
+<span class="t">Console</span>.<span class="n">WriteLine</span>(p3.<span class="n">Lungime</span>()); <span class="c">// distanța față de (0,0)</span></pre>
 </div>
 
 <div class="explain-box green">
 <div class="explain-head">✅ DE CE ESTE UTIL</div>
 <p>Fără supraîncărcarea operatorului, ar trebui să scrii <code>Punct2D p3 = Punct2D.Aduna(p1, p2)</code>. Cu supraîncărcare, codul devine natural și lizibil: <code>p3 = p1 + p2</code>. Compilatorul transformă automat operatorul <code>+</code> în apelul metodei statice corespunzătoare.</p>
+<p>Acest pattern este extrem de util în domeniile în care matematica joacă un rol central: grafică 2D/3D, motoare de fizică, calcule financiare, procesare de semnale. Librariile populare precum <em>Unity</em> (Vector2, Vector3) sau <em>System.Numerics</em> folosesc supraîncărcarea operatorilor pe scară largă exact din acest motiv.</p>
 </div>
 
-<h3 class="sub"><span class="num">3</span> Reguli importante</h3>
+<h3 class="sub"><span class="num">4</span> Exemplu aplicat — clasa Fracție</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">Un exemplu mai complet care combină supraîncărcarea metodelor și a operatorilor: o clasă pentru fracții matematice.</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Fractie.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="k">public class</span> <span class="t">Fractie</span>
+{
+    <span class="k">public int</span> Numarator   { <span class="k">get</span>; }
+    <span class="k">public int</span> Numitor     { <span class="k">get</span>; }
+
+    <span class="k">public</span> <span class="t">Fractie</span>(<span class="k">int</span> numarator, <span class="k">int</span> numitor)
+    {
+        <span class="k">if</span> (numitor == <span class="m">0</span>) <span class="k">throw new</span> <span class="t">ArgumentException</span>(<span class="s">"Numitor 0!"</span>);
+        <span class="k">int</span> d = <span class="n">Cmmdc</span>(Math.Abs(numarator), Math.Abs(numitor));
+        Numarator = numarator / d;
+        Numitor   = numitor / d;
+    }
+
+    <span class="c">// Supraîncărcare + pentru fracții</span>
+    <span class="k">public static</span> <span class="t">Fractie</span> <span class="k">operator</span> +(<span class="t">Fractie</span> a, <span class="t">Fractie</span> b)
+        =&gt; <span class="k">new</span> <span class="t">Fractie</span>(
+            a.Numarator * b.Numitor + b.Numarator * a.Numitor,
+            a.Numitor * b.Numitor);
+
+    <span class="c">// Supraîncărcare * pentru fracții</span>
+    <span class="k">public static</span> <span class="t">Fractie</span> <span class="k">operator</span> *(<span class="t">Fractie</span> a, <span class="t">Fractie</span> b)
+        =&gt; <span class="k">new</span> <span class="t">Fractie</span>(a.Numarator * b.Numarator, a.Numitor * b.Numitor);
+
+    <span class="c">// Conversie implicită la double</span>
+    <span class="k">public static implicit operator double</span>(<span class="t">Fractie</span> f)
+        =&gt; (<span class="k">double</span>)f.Numarator / f.Numitor;
+
+    <span class="k">private static int</span> <span class="n">Cmmdc</span>(<span class="k">int</span> a, <span class="k">int</span> b)
+        =&gt; b == <span class="m">0</span> ? a : <span class="n">Cmmdc</span>(b, a % b);
+
+    <span class="k">public override string</span> <span class="n">ToString</span>()
+        =&gt; <span class="s">$"{Numarator}/{Numitor}"</span>;
+}
+
+<span class="c">// Utilizare</span>
+<span class="t">Fractie</span> f1 = <span class="k">new</span> <span class="t">Fractie</span>(<span class="m">1</span>, <span class="m">2</span>);   <span class="c">// 1/2</span>
+<span class="t">Fractie</span> f2 = <span class="k">new</span> <span class="t">Fractie</span>(<span class="m">1</span>, <span class="m">3</span>);   <span class="c">// 1/3</span>
+<span class="t">Fractie</span> suma = f1 + f2;            <span class="c">// → 5/6</span>
+<span class="t">Fractie</span> prod = f1 * f2;            <span class="c">// → 1/6</span>
+<span class="k">double</span> val = f1;                   <span class="c">// → 0.5 (conversie implicită)</span>
+<span class="t">Console</span>.<span class="n">WriteLine</span>(suma);            <span class="c">// → "5/6"</span></pre>
+</div>
+
+<h3 class="sub"><span class="num">5</span> Reguli importante</h3>
+
 <div class="explain-box">
-<div class="explain-head">⚠️ CE NU SE POATE</div>
+<div class="explain-head">⚠️ CE NU SE POATE — tipul de return</div>
 <p>Două metode NU pot forma supraîncărcare validă dacă diferă <strong>doar prin tipul de return</strong>. De exemplu, <code>int Calcul(int x)</code> și <code>double Calcul(int x)</code> vor provoca eroare de compilare — compilatorul nu poate distinge între ele după semnătură.</p>
 </div>
+
+<div class="explain-box blue">
+<div class="explain-head">📋 REGULI COMPLETE DE SUPRAÎNCĂRCARE</div>
+<p><strong>Se poate supraîncărca</strong> diferind prin: numărul de parametri, tipul parametrilor, ordinea parametrilor (dacă tipurile sunt diferite).</p>
+<p><strong>Nu se poate supraîncărca</strong> diferind doar prin: tipul de return, numele parametrilor (ex: <code>int x</code> vs <code>int y</code>), cuvintele cheie <code>ref</code>/<code>out</code> între ele (deși <code>ref</code>/<code>out</code> vs nimic creează o semnătură diferită).</p>
 </div>
 
+<h3 class="sub"><span class="num">6</span> Supraîncărcarea în constructori</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">Supraîncărcarea nu se aplică doar metodelor obișnuite — constructorii pot fi și ei supraîncărcați, ceea ce este o practică extrem de frecventă.</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Persoana.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="k">public class</span> <span class="t">Persoana</span>
+{
+    <span class="k">public string</span> Nume    { <span class="k">get</span>; }
+    <span class="k">public int</span>    Varsta  { <span class="k">get</span>; }
+    <span class="k">public string</span> Email   { <span class="k">get</span>; }
+
+    <span class="c">// Constructor minimal</span>
+    <span class="k">public</span> <span class="t">Persoana</span>(<span class="k">string</span> nume)
+        : <span class="k">this</span>(nume, <span class="m">0</span>, <span class="s">""</span>) { }
+
+    <span class="c">// Constructor cu vârstă</span>
+    <span class="k">public</span> <span class="t">Persoana</span>(<span class="k">string</span> nume, <span class="k">int</span> varsta)
+        : <span class="k">this</span>(nume, varsta, <span class="s">""</span>) { }
+
+    <span class="c">// Constructor complet — delegat de ceilalți prin : this(...)</span>
+    <span class="k">public</span> <span class="t">Persoana</span>(<span class="k">string</span> nume, <span class="k">int</span> varsta, <span class="k">string</span> email)
+    {
+        Nume   = nume;
+        Varsta = varsta;
+        Email  = email;
+    }
+
+    <span class="k">public override string</span> <span class="n">ToString</span>()
+        =&gt; <span class="s">$"{Nume}, {Varsta} ani, {Email}"</span>;
+}
+
+<span class="c">// Utilizare</span>
+<span class="t">Persoana</span> p1 = <span class="k">new</span> <span class="t">Persoana</span>(<span class="s">"Ana"</span>);
+<span class="t">Persoana</span> p2 = <span class="k">new</span> <span class="t">Persoana</span>(<span class="s">"Ion"</span>, <span class="m">25</span>);
+<span class="t">Persoana</span> p3 = <span class="k">new</span> <span class="t">Persoana</span>(<span class="s">"Maria"</span>, <span class="m">30</span>, <span class="s">"maria@ex.ro"</span>);</pre>
+</div>
+
+<div class="explain-box green">
+<div class="explain-head">✅ PATTERN: CONSTRUCTOR CHAINING</div>
+<p>Folosind <code>: this(...)</code>, constructorii mai simpli îl delegă pe cel mai complet. Astfel logica de inițializare există într-un singur loc, nu duplicată în fiecare constructor. Aceasta este o bună practică recomandată de standardele de cod C# pentru a evita erori de sincronizare când constructorul principal se schimbă.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ PAGE 3 ═══ -->
 <div id="p3" class="page">
 <h2 class="sec">Generice — polimorfism static avansat</h2>
-<p class="sec-lead">Genericele (Generics) în C# reprezintă o formă sofisticată de polimorfism static. Ele permit scrierea de cod reutilizabil care funcționează cu orice tip, cu toate verificările făcute la compilare.</p>
+<p class="sec-lead">Genericele (Generics) în C# reprezintă o formă sofisticată de polimorfism static. Ele permit scrierea de cod reutilizabil care funcționează cu orice tip, cu toate verificările făcute la compilare. Fără generice, o mare parte din biblioteca standard C# pur și simplu nu ar putea exista în forma sa actuală.</p>
 
 <h3 class="sub"><span class="num">1</span> Problema fără generice</h3>
 
@@ -389,7 +649,28 @@ footer{background:var(--ink);padding:2rem;text-align:center}
     <span class="k">public void</span> <span class="n">Pune</span>(<span class="k">string</span> val) { _valoare = val; }
     <span class="k">public string</span> <span class="n">Ia</span>() { <span class="k">return</span> _valoare; }
 }
-<span class="c">// Ar trebui să repetăm pentru fiecare tip... nepractic!</span></pre>
+<span class="c">// Ar trebui să repetăm pentru fiecare tip... nepractic!</span>
+
+
+<span class="c">// Varianta cu object — mai flexibilă, dar cu probleme</span>
+<span class="k">public class</span> <span class="t">CutieObject</span>
+{
+    <span class="k">private object</span> _valoare;
+    <span class="k">public void</span> <span class="n">Pune</span>(<span class="k">object</span> val) { _valoare = val; }
+    <span class="k">public object</span> <span class="n">Ia</span>() { <span class="k">return</span> _valoare; }
+}
+
+<span class="c">// Problemele apar la utilizare:</span>
+<span class="t">CutieObject</span> cutie = <span class="k">new</span> <span class="t">CutieObject</span>();
+cutie.<span class="n">Pune</span>(<span class="m">42</span>);
+<span class="k">int</span> val = (<span class="k">int</span>)cutie.<span class="n">Ia</span>(); <span class="c">// cast manual — risc de InvalidCastException!</span>
+cutie.<span class="n">Pune</span>(<span class="s">"eroare"</span>);
+<span class="k">int</span> gresit = (<span class="k">int</span>)cutie.<span class="n">Ia</span>(); <span class="c">// CRASH la runtime — compilatorul n-a prins!</span></pre>
+</div>
+
+<div class="explain-box">
+<div class="explain-head">⚠️ DE CE object NU ESTE SOLUȚIA</div>
+<p>Folosind <code>object</code> ca tip universal se pierde siguranța la compilare și apare <em>boxing</em> — procesul costisitor prin care valorile de tip valoare (int, double, struct) sunt împachetate în obiecte heap. Înainte de C# 2.0 și introducerea genericelor (2005), <code>ArrayList</code> folosea <code>object</code>, iar erorile de casting la runtime erau o problemă reală în aplicații mari.</p>
 </div>
 
 <h3 class="sub"><span class="num n2">2</span> Soluția cu generice</h3>
@@ -419,7 +700,10 @@ cutieInt.<span class="n">Pune</span>(<span class="m">42</span>);
 
 <span class="t">Cutie</span>&lt;<span class="k">string</span>&gt; cutieStr = <span class="k">new</span> <span class="t">Cutie</span>&lt;<span class="k">string</span>&gt;();
 cutieStr.<span class="n">Pune</span>(<span class="s">"Salut"</span>);
-<span class="k">string</span> text = cutieStr.<span class="n">Ia</span>(); <span class="c">// Funcționează perfect</span></pre>
+<span class="k">string</span> text = cutieStr.<span class="n">Ia</span>(); <span class="c">// Funcționează perfect</span>
+
+<span class="c">// Compilatorul NU permite tipuri greșite:</span>
+<span class="c">// cutieInt.Pune("text"); ← EROARE DE COMPILARE — în siguranță!</span></pre>
 </div>
 
 <h3 class="sub"><span class="num n3">3</span> Metode generice și constrângeri</h3>
@@ -459,8 +743,141 @@ cutieStr.<span class="n">Pune</span>(<span class="s">"Salut"</span>);
 <div class="explain-head">💡 DE CE ESTE POLIMORFISM STATIC</div>
 <p>Când compilatorul vede <code>Maxim&lt;int&gt;(10, 25)</code>, el generează o versiune specifică a metodei pentru tipul <code>int</code>. Când vede <code>Maxim&lt;string&gt;</code>, generează alta. Fiecare versiune este specifică tipului și complet verificată — niciun risc de eroare la runtime din cauza tipurilor incompatibile.</p>
 </div>
+
+<h3 class="sub"><span class="num">4</span> Tipuri de constrângeri (where)</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">Constrângerile generice sunt unul dintre cele mai puternice instrumente din C#. Ele îți permit să restrângi ce tipuri pot fi folosite cu un parametru generic, deblockând în același timp metode și proprietăți specifice acelui tip.</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">Constrangeri.cs — Tipuri de where</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// where T : struct          → T trebuie să fie tip valoare (int, double, struct)</span>
+<span class="k">public static</span> <span class="t">T</span> <span class="n">ValoareDefault</span>&lt;<span class="t">T</span>&gt;() <span class="k">where</span> <span class="t">T</span> : <span class="k">struct</span>
+    =&gt; <span class="k">default</span>(<span class="t">T</span>); <span class="c">// pentru int → 0, pentru bool → false</span>
+
+<span class="c">// where T : class           → T trebuie să fie tip referință</span>
+<span class="k">public static</span> <span class="k">bool</span> <span class="n">EsteNull</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> obj) <span class="k">where</span> <span class="t">T</span> : <span class="k">class</span>
+    =&gt; obj == <span class="k">null</span>;
+
+<span class="c">// where T : InterfataMea     → T trebuie să implementeze interfața</span>
+<span class="k">public static void</span> <span class="n">Proceseaza</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> item) <span class="k">where</span> <span class="t">T</span> : <span class="t">IDisposable</span>
+{
+    <span class="k">using</span> (<span class="t">T</span> resource = item)
+    {
+        <span class="c">// item.Dispose() disponibil datorită constrângerii</span>
+    }
+}
+
+<span class="c">// where T : ClassaBaza       → T trebuie să fie acea clasă sau subclasă</span>
+<span class="k">public static void</span> <span class="n">Salveaza</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> entitate) <span class="k">where</span> <span class="t">T</span> : <span class="t">EntitateDB</span>
+{
+    <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"Salvez {entitate.TabelNume}"</span>); <span class="c">// proprietate din clasa bază</span>
+}
+
+<span class="c">// Constrângeri multiple — combinate cu virgulă</span>
+<span class="k">public static</span> <span class="t">T</span> <span class="n">ClonaEgala</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> sursa)
+    <span class="k">where</span> <span class="t">T</span> : <span class="k">class</span>, <span class="t">ICloneable</span>, <span class="k">new</span>()
+{
+    <span class="k">return</span> (<span class="t">T</span>)sursa.<span class="n">Clone</span>();
+}</pre>
 </div>
 
+<h3 class="sub"><span class="num">5</span> Colecții generice din biblioteca standard</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">Genericele sunt omniprezente în biblioteca standard C#. Iată câteva dintre cele mai utilizate colecții generice și cum se compară cu variantele ne-generice mai vechi:</p>
+
+<div class="compare-grid">
+<div class="compare-card static">
+<div class="compare-title">GENERICE (recomandat)</div>
+<ul class="compare-list">
+<li><code>List&lt;T&gt;</code> — listă dinamică tipizată</li>
+<li><code>Dictionary&lt;TKey, TValue&gt;</code> — map tip-safe</li>
+<li><code>Queue&lt;T&gt;</code> — coadă tipizată</li>
+<li><code>Stack&lt;T&gt;</code> — stivă tipizată</li>
+<li><code>HashSet&lt;T&gt;</code> — mulțime tipizată</li>
+<li>Fără boxing, fără cast, erori la compilare</li>
+</ul>
+</div>
+<div class="compare-card dynamic">
+<div class="compare-title">NE-GENERICE (evitate)</div>
+<ul class="compare-list">
+<li><code>ArrayList</code> — stochează <code>object</code></li>
+<li><code>Hashtable</code> — chei și valori <code>object</code></li>
+<li><code>Queue</code> — elemete de tip <code>object</code></li>
+<li><code>Stack</code> — elemente de tip <code>object</code></li>
+<li>Boxing pentru tipuri valoare</li>
+<li>Cast manual, riscuri la runtime</li>
+</ul>
+</div>
+</div>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">ColectiiGenerice.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// List&lt;T&gt; — cel mai folosit tip generic din C#</span>
+<span class="t">List</span>&lt;<span class="k">string</span>&gt; studenti = <span class="k">new</span> <span class="t">List</span>&lt;<span class="k">string</span>&gt;();
+studenti.<span class="n">Add</span>(<span class="s">"Ana"</span>);
+studenti.<span class="n">Add</span>(<span class="s">"Ion"</span>);
+studenti.<span class="n">Add</span>(<span class="s">"Maria"</span>);
+<span class="c">// studenti.Add(42); ← EROARE DE COMPILARE — nu poți pune int în List&lt;string&gt;</span>
+
+<span class="c">// Dictionary&lt;TKey, TValue&gt;</span>
+<span class="t">Dictionary</span>&lt;<span class="k">string</span>, <span class="k">int</span>&gt; note = <span class="k">new</span> <span class="t">Dictionary</span>&lt;<span class="k">string</span>, <span class="k">int</span>&gt;();
+note[<span class="s">"Ana"</span>]   = <span class="m">9</span>;
+note[<span class="s">"Ion"</span>]   = <span class="m">7</span>;
+note[<span class="s">"Maria"</span>] = <span class="m">10</span>;
+
+<span class="k">foreach</span> (<span class="k">var</span> kv <span class="k">in</span> note)
+    <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"{kv.Key}: {kv.Value}"</span>);
+
+<span class="c">// Metode generice LINQ funcționează pe orice colecție IEnumerable&lt;T&gt;</span>
+<span class="k">var</span> promovati = studenti.<span class="n">Where</span>(s =&gt; note[s] &gt;= <span class="m">5</span>).<span class="n">ToList</span>();
+<span class="k">double</span> medie  = note.<span class="n">Values</span>.<span class="n">Average</span>();</pre>
+</div>
+
+<h3 class="sub"><span class="num">6</span> Interfețe generice comune</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">Genericele strălucesc cu adevărat atunci când sunt combinate cu interfețe generice. Iată câteva interfețe generice din .NET pe care le vei întâlni frecvent:</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">InterfeteGenerice.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// IEnumerable&lt;T&gt; — orice colecție iterabilă</span>
+<span class="k">public void</span> <span class="n">AfiseazaTot</span>&lt;<span class="t">T</span>&gt;(<span class="t">IEnumerable</span>&lt;<span class="t">T</span>&gt; colectie)
+{
+    <span class="k">foreach</span> (<span class="t">T</span> item <span class="k">in</span> colectie)
+        <span class="t">Console</span>.<span class="n">WriteLine</span>(item);
+}
+<span class="c">// Funcționează cu List&lt;T&gt;, T[], Queue&lt;T&gt;, orice altceva!</span>
+
+
+<span class="c">// IComparable&lt;T&gt; — pentru comparare și sortare</span>
+<span class="k">public class</span> <span class="t">Student</span> : <span class="t">IComparable</span>&lt;<span class="t">Student</span>&gt;
+{
+    <span class="k">public string</span> Nume  { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public double</span> Medie { <span class="k">get</span>; <span class="k">set</span>; }
+
+    <span class="k">public int</span> <span class="n">CompareTo</span>(<span class="t">Student</span> other)
+        =&gt; <span class="k">this</span>.Medie.<span class="n">CompareTo</span>(other.Medie);
+}
+
+<span class="c">// Acum putem sorta o List&lt;Student&gt; direct</span>
+<span class="t">List</span>&lt;<span class="t">Student</span>&gt; clasa = <span class="k">new</span> <span class="t">List</span>&lt;<span class="t">Student</span>&gt; { <span class="c">/* ... */</span> };
+clasa.<span class="n">Sort</span>(); <span class="c">// folosește CompareTo — totul type-safe!</span>
+
+
+<span class="c">// IEquatable&lt;T&gt; — pentru comparare de egalitate eficientă</span>
+<span class="k">public class</span> <span class="t">Produs</span> : <span class="t">IEquatable</span>&lt;<span class="t">Produs</span>&gt;
+{
+    <span class="k">public int</span>    Id   { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public string</span> Nume { <span class="k">get</span>; <span class="k">set</span>; }
+
+    <span class="k">public bool</span> <span class="n">Equals</span>(<span class="t">Produs</span> other)
+        =&gt; other != <span class="k">null</span> &amp;&amp; <span class="k">this</span>.Id == other.Id;
+}</pre>
+</div>
+
+<div class="explain-box green">
+<div class="explain-head">✅ CONCLUZIE DESPRE GENERICE</div>
+<p>Genericele sunt pilonul pe care se sprijină întreaga bibliotecă modernă .NET. LINQ, colecțiile, task-urile asincrone (<code>Task&lt;T&gt;</code>), injectarea de dependențe, și zeci de pattern-uri de design comune în C# — toate folosesc generice ca fundament. Stăpânirea lor nu este opțională pentru un programator C# serios.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ PAGE 4 ═══ -->
 <div id="p4" class="page">
 <h2 class="sec">Static vs Dinamic — comparație</h2>
 <p class="sec-lead">Polimorfismul static și cel dinamic nu sunt în competiție — se completează. Înțelegerea diferențelor te ajută să alegi instrumentul potrivit pentru fiecare situație.</p>
@@ -475,6 +892,8 @@ cutieStr.<span class="n">Pune</span>(<span class="s">"Salut"</span>);
 <li>Siguranță completă la compilare</li>
 <li>Nu necesită <code>virtual</code> / <code>override</code></li>
 <li>Tipul obiectului nu contează la runtime</li>
+<li>Ideal pentru operații pe tipuri diferite de date</li>
+<li>Util în algoritmi și structuri de date generice</li>
 </ul>
 </div>
 <div class="compare-card dynamic">
@@ -486,6 +905,8 @@ cutieStr.<span class="n">Pune</span>(<span class="s">"Salut"</span>);
 <li>Flexibilitate — noi tipuri fără recompilare</li>
 <li>Necesită <code>virtual</code>, <code>override</code>, <code>abstract</code></li>
 <li>Tipul real al obiectului decide metoda</li>
+<li>Ideal pentru ierarhii de obiecte cu comportament diferit</li>
+<li>Util în design patterns și sisteme extensibile</li>
 </ul>
 </div>
 </div>
@@ -529,25 +950,138 @@ cutieStr.<span class="n">Pune</span>(<span class="s">"Salut"</span>);
 a.<span class="n">Sunet</span>(); <span class="c">// → Ham!  (decizie la RUNTIME)</span></pre>
 </div>
 
-<h3 class="sub"><span class="num n2">2</span> Când să folosești fiecare</h3>
+<h3 class="sub"><span class="num n2">2</span> Exemplu practic combinat — amândouă în același proiect</h3>
+<p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">În realitate, cele două forme coexistă în același cod. Iată un exemplu de sistem de rapoarte care folosește ambele tipuri de polimorfism în mod complementar.</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">SistemRapoarte.cs — combinat</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// ── Polimorfism DINAMIC: ierarhie de tipuri de raport ─────</span>
+<span class="k">public abstract class</span> <span class="t">Raport</span>
+{
+    <span class="k">public string</span> Titlu { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public abstract string</span> <span class="n">Genereaza</span>();  <span class="c">// fiecare tip știe cum se generează</span>
+}
+
+<span class="k">public class</span> <span class="t">RaportPDF</span> : <span class="t">Raport</span>
+{
+    <span class="k">public override string</span> <span class="n">Genereaza</span>() =&gt; <span class="s">$"[PDF] {Titlu}.pdf"</span>;
+}
+
+<span class="k">public class</span> <span class="t">RaportExcel</span> : <span class="t">Raport</span>
+{
+    <span class="k">public override string</span> <span class="n">Genereaza</span>() =&gt; <span class="s">$"[XLS] {Titlu}.xlsx"</span>;
+}
+
+<span class="k">public class</span> <span class="t">RaportHTML</span> : <span class="t">Raport</span>
+{
+    <span class="k">public override string</span> <span class="n">Genereaza</span>() =&gt; <span class="s">$"[HTML] {Titlu}.html"</span>;
+}
+
+
+<span class="c">// ── Polimorfism STATIC: supraîncărcare pentru salvare ─────</span>
+<span class="k">public class</span> <span class="t">Manager</span>
+{
+    <span class="c">// Supraîncărcare — salvare locală</span>
+    <span class="k">public void</span> <span class="n">Salveaza</span>(<span class="t">Raport</span> r, <span class="k">string</span> cale)
+        =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">$"Salvez {r.Genereaza()} în {cale}"</span>);
+
+    <span class="c">// Supraîncărcare — salvare cu backup</span>
+    <span class="k">public void</span> <span class="n">Salveaza</span>(<span class="t">Raport</span> r, <span class="k">string</span> cale, <span class="k">bool</span> backup)
+    {
+        <span class="k">if</span> (backup) <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"Creez backup..."</span>);
+        <span class="n">Salveaza</span>(r, cale);
+    }
+
+    <span class="c">// Supraîncărcare generică — salvare în colecție</span>
+    <span class="k">public void</span> <span class="n">SalveazaTot</span>&lt;<span class="t">T</span>&gt;(<span class="t">IEnumerable</span>&lt;<span class="t">T</span>&gt; rapoarte, <span class="k">string</span> cale)
+        <span class="k">where</span> <span class="t">T</span> : <span class="t">Raport</span>
+    {
+        <span class="k">foreach</span> (<span class="k">var</span> r <span class="k">in</span> rapoarte)
+            <span class="n">Salveaza</span>(r, cale);
+    }
+}
+
+<span class="c">// Utilizare — amândouă polimorfismele în acțiune</span>
+<span class="t">Manager</span> mgr = <span class="k">new</span> <span class="t">Manager</span>();
+<span class="t">List</span>&lt;<span class="t">Raport</span>&gt; lista = <span class="k">new</span> <span class="t">List</span>&lt;<span class="t">Raport</span>&gt;
+{
+    <span class="k">new</span> <span class="t">RaportPDF</span>   { Titlu = <span class="s">"Vânzări"</span>   },
+    <span class="k">new</span> <span class="t">RaportExcel</span> { Titlu = <span class="s">"Inventar"</span>  },
+    <span class="k">new</span> <span class="t">RaportHTML</span>  { Titlu = <span class="s">"Dashboard"</span> }
+};
+
+mgr.<span class="n">SalveazaTot</span>(lista, <span class="s">"/output"</span>);
+<span class="c">// → [PDF] Vânzări.pdf     (dinamic: știe că e RaportPDF)</span>
+<span class="c">// → [XLS] Inventar.xlsx   (dinamic: știe că e RaportExcel)</span>
+<span class="c">// → [HTML] Dashboard.html  (dinamic: știe că e RaportHTML)</span></pre>
+</div>
 
 <div class="explain-box blue">
+<div class="explain-head">🔍 ANALIZĂ</div>
+<p>În exemplul de mai sus, <code>SalveazaTot&lt;T&gt;</code> este polimorfism <strong>static</strong> — compilatorul știe la build time că T este <code>Raport</code> sau o subclasă a sa. Dar <code>r.Genereaza()</code> în interiorul acelei metode este polimorfism <strong>dinamic</strong> — la runtime C# determină dacă <code>r</code> este <code>RaportPDF</code>, <code>RaportExcel</code> sau altceva și apelează metoda suprascrisă corespunzătoare.</p>
+<p>Cele două mecanisme colaborează: genericele asigură că tipul este corect la compilare, iar metodele virtuale asigură comportamentul corect la runtime.</p>
+</div>
+
+<h3 class="sub"><span class="num">3</span> Când să folosești fiecare</h3>
+
+<div class="explain-box">
 <div class="explain-head">✅ FOLOSEȘTE POLIMORFISM STATIC când...</div>
-<p>Ai aceeași operație conceptuală dar cu tipuri de date diferite (ex: calcule numerice, conversii). Prioritatea este performanța. Vrei că compilatorul să prindă orice greșeală de tip înainte de rulare. Lucrezi cu structuri de date generice (colecții, depozite, utilitare).</p>
+<p>Ai aceeași operație conceptuală dar cu tipuri de date diferite (ex: calcule numerice, conversii, formatări). Prioritatea este performanța — sisteme embedded, bucle critice, procesare de date în volum mare. Vrei că compilatorul să prindă orice greșeală de tip înainte de rulare. Lucrezi cu structuri de date generice (colecții, depozite, utilitare). Implentezi algoritmi matematici sau operații pe structuri de date imutabile.</p>
 </div>
 
 <div class="explain-box green">
 <div class="explain-head">✅ FOLOSEȘTE POLIMORFISM DINAMIC când...</div>
-<p>Ai o familie de tipuri cu comportament diferit (animale, forme geometrice, angajați). Vrei să adaugi tipuri noi fără să modifici codul existent (principiul Open/Closed). Lucrezi cu liste de obiecte de tipuri diferite dar înrudite. Implementezi design patterns (Strategy, Observer, Factory).</p>
+<p>Ai o familie de tipuri cu comportament diferit (animale, forme geometrice, angajați, tipuri de documente). Vrei să adaugi tipuri noi fără să modifici codul existent (principiul Open/Closed). Lucrezi cu liste de obiecte de tipuri diferite dar înrudite. Implementezi design patterns (Strategy, Observer, Factory, Command). Construiești sisteme care trebuie să fie extensibile de terți sau plugin-uri.</p>
+</div>
+
+<h3 class="sub"><span class="num">4</span> Greșeli frecvente de evitat</h3>
+
+<div class="code-block">
+<div class="code-header"><span class="code-filename">GreselihFrecvente.cs</span><span class="code-lang">C#</span></div>
+<pre><span class="c">// ❌ GREȘEALĂ 1: supraîncărcare care diferă doar prin return type</span>
+<span class="k">public int</span>    <span class="n">Calcul</span>(<span class="k">int</span> x) { <span class="k">return</span> x; }
+<span class="k">public double</span> <span class="n">Calcul</span>(<span class="k">int</span> x) { <span class="k">return</span> x; } <span class="c">// EROARE COMPILARE</span>
+
+
+<span class="c">// ❌ GREȘEALĂ 2: supraîncărcare cu only parametri numiți diferit</span>
+<span class="k">public int</span> <span class="n">Calcul</span>(<span class="k">int</span> a) { <span class="k">return</span> a; }
+<span class="k">public int</span> <span class="n">Calcul</span>(<span class="k">int</span> b) { <span class="k">return</span> b; } <span class="c">// EROARE COMPILARE</span>
+
+
+<span class="c">// ❌ GREȘEALĂ 3: new în loc de override — ascundere, nu polimorfism dinamic</span>
+<span class="k">public class</span> <span class="t">Baza</span>
+{
+    <span class="k">public virtual void</span> <span class="n">Metoda</span>() =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"Baza"</span>);
+}
+<span class="k">public class</span> <span class="t">Derivata</span> : <span class="t">Baza</span>
+{
+    <span class="k">public new void</span> <span class="n">Metoda</span>() =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"Derivata"</span>); <span class="c">// new!</span>
+}
+<span class="t">Baza</span> b = <span class="k">new</span> <span class="t">Derivata</span>();
+b.<span class="n">Metoda</span>(); <span class="c">// → "Baza"  ← SURPRIZĂ! new nu creează polimorfism dinamic</span>
+
+<span class="c">// ✅ CORECT: override pentru polimorfism dinamic real</span>
+<span class="k">public class</span> <span class="t">DerivataBuna</span> : <span class="t">Baza</span>
+{
+    <span class="k">public override void</span> <span class="n">Metoda</span>() =&gt; <span class="t">Console</span>.<span class="n">WriteLine</span>(<span class="s">"DerivataBuna"</span>);
+}
+<span class="t">Baza</span> b2 = <span class="k">new</span> <span class="t">DerivataBuna</span>();
+b2.<span class="n">Metoda</span>(); <span class="c">// → "DerivataBuna"  ← polimorfism dinamic corect</span></pre>
+</div>
+
+<div class="explain-box">
+<div class="explain-head">⚠️ CUVÂNTUL CHEIE new — MAI RAU DECÂT PARE</div>
+<p>Folosirea cuvântului cheie <code>new</code> pentru a "ascunde" o metodă din clasa bază (method hiding) este una dintre cele mai frecvente surse de confuzie în C#. Compilatorul nu va da eroare, dar comportamentul la runtime va fi surprinzător: dacă referința este de tipul clasei baze, se apelează metoda din bază, nu din derivată — indiferent de tipul real al obiectului. Evită <code>new</code> pentru metode decât dacă știi exact ce faci și de ce.</p>
 </div>
 
 <div class="recap-grid">
 <div class="recap-card"><div class="rc-num rc-red">2</div><div class="rc-label">mecanisme principale: overloading + generice</div></div>
 <div class="recap-card"><div class="rc-num rc-blue">0</div><div class="rc-label">overhead la runtime față de cod direct</div></div>
 <div class="recap-card"><div class="rc-num rc-green">100%</div><div class="rc-label">erori de tip prinse la compilare</div></div>
+<div class="recap-card"><div class="rc-num rc-red">3</div><div class="rc-label">tipuri de constrângeri generice uzuale</div></div>
 </div>
 
-<h3 class="sub"><span class="num n3">3</span> Mini quiz — testează-ți cunoștințele</h3>
+<h3 class="sub"><span class="num n3">5</span> Mini quiz — testează-ți cunoștințele</h3>
 
 <div class="quiz-wrap" id="q1">
 <p class="quiz-q">1. Care formă de polimorfism este rezolvată la momentul compilării?</p>
@@ -577,6 +1111,39 @@ a.<span class="n">Sunet</span>(); <span class="c">// → Ham!  (decizie la RUNTI
 <button class="quiz-opt" data-correct="false"><code>int Calc(int x)</code> și <code>double Calc(int x)</code></button>
 <button class="quiz-opt" data-correct="true"><code>int Calc(int x)</code> și <code>int Calc(int x, int y)</code></button>
 <button class="quiz-opt" data-correct="false"><code>int Calc(int x)</code> și <code>int Calc(int z)</code></button>
+</div>
+<div class="quiz-feedback"></div>
+<button class="quiz-reset">Resetează</button>
+</div>
+
+<div class="quiz-wrap" id="q4">
+<p class="quiz-q">4. Ce se întâmplă dacă folosești <code>new</code> în loc de <code>override</code> pentru a redefini o metodă?</p>
+<div class="quiz-opts">
+<button class="quiz-opt" data-correct="false">Se obține polimorfism dinamic identic cu <code>override</code></button>
+<button class="quiz-opt" data-correct="true">Metoda din clasa bază este ascunsă, nu înlocuită — o referință de tip bază apelează metoda originală</button>
+<button class="quiz-opt" data-correct="false">Compilatorul returnează eroare</button>
+</div>
+<div class="quiz-feedback"></div>
+<button class="quiz-reset">Resetează</button>
+</div>
+
+<div class="quiz-wrap" id="q5">
+<p class="quiz-q">5. De ce genericele elimină necesitatea folosirii <code>object</code> ca tip universal?</p>
+<div class="quiz-opts">
+<button class="quiz-opt" data-correct="false">Deoarece genericele rulează mai lent și sunt mai sigure</button>
+<button class="quiz-opt" data-correct="false">Deoarece <code>object</code> nu mai există în C# modern</button>
+<button class="quiz-opt" data-correct="true">Deoarece genericele verifică tipul la compilare, evitând boxing și erorile de cast la runtime</button>
+</div>
+<div class="quiz-feedback"></div>
+<button class="quiz-reset">Resetează</button>
+</div>
+
+<div class="quiz-wrap" id="q6">
+<p class="quiz-q">6. Care constrângere generică (<code>where</code>) trebuie folosită dacă vrei să poți apela <code>new T()</code> în interiorul metodei?</p>
+<div class="quiz-opts">
+<button class="quiz-opt" data-correct="false"><code>where T : struct</code></button>
+<button class="quiz-opt" data-correct="true"><code>where T : new()</code></button>
+<button class="quiz-opt" data-correct="false"><code>where T : IComparable&lt;T&gt;</code></button>
 </div>
 <div class="quiz-feedback"></div>
 <button class="quiz-reset">Resetează</button>
